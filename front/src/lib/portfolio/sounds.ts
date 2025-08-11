@@ -1,7 +1,20 @@
-export const playSound = (type: string) => {
-  if (typeof window === "undefined") return;
+type SoundType =
+  | "matrix" | "hacker" | "retro" | "cyberpunk" | "ocean" | "fire"
+  | "rainbow" | "developer" | "success" | "click" | "coffee" | "game";
+
+type CtxCtor = typeof AudioContext;
+
+function getAudioContextCtor(): CtxCtor | null {
+  if (typeof window === "undefined") return null;
+  const w = window as Window & typeof globalThis & { webkitAudioContext?: CtxCtor };
+  return w.AudioContext ?? w.webkitAudioContext ?? null;
+}
+
+export const playSound = (type: SoundType) => {
+  const Ctx = getAudioContextCtor();
+  if (!Ctx) return;
+
   try {
-    const Ctx = (window as any).AudioContext || (window as any).webkitAudioContext;
     const audioContext = new Ctx();
     const osc = audioContext.createOscillator();
     const gain = audioContext.createGain();
@@ -36,14 +49,19 @@ export const playSound = (type: string) => {
       case "coffee":
         set(150); set(200, 0.05); osc.type = "sine"; vol(0.012); ramp(0.001, 0.15); break;
       case "game":
-        set(440); set(880, 0.08); osc.type = "sine"; vol(0.02); ramp(0.001, 0.25); break;
       default:
-        set(440); osc.type = "sine"; vol(0.015); ramp(0.001, 0.1);
+        set(440); set(880, 0.08); osc.type = "sine"; vol(0.02); ramp(0.001, 0.25); break;
     }
 
     osc.start();
     osc.stop(audioContext.currentTime + 0.5);
-  } catch (e) {
-    // Ignorar fallos de audio
+    osc.onended = () => {
+      // liberar recursos cuando termina
+      if (typeof audioContext.close === "function") {
+        audioContext.close().catch(() => {});
+      }
+    };
+  } catch {
+    // Ignorar fallos de audio (bloqueado por user gesture, etc.)
   }
 };

@@ -10,11 +10,10 @@ function rand(min: number, max: number) {
 }
 
 const Particle: React.FC<{
-  i: number; w: number; h: number; cursorClass: string; start: { x: number; y: number };
-}> = ({ i, w, h, cursorClass, start }) => {
+  w: number; h: number; cursorClass: string; start: { x: number; y: number };
+}> = ({ w, h, cursorClass, start }) => {
   const controls = useAnimation();
 
-  // loop infinito: al terminar un movimiento, empieza otro hacia coords nuevas
   useEffect(() => {
     let mounted = true;
     const loop = async () => {
@@ -43,27 +42,24 @@ const Particle: React.FC<{
 };
 
 function ParticlesBase({ active, cursorClass, count = 30 }: Props) {
-  if (!active) return null;
-
-
+  // ❗ hooks siempre se llaman
   const w = typeof window !== "undefined" ? window.innerWidth : 1000;
   const h = typeof window !== "undefined" ? window.innerHeight : 1000;
 
-  // posiciones iniciales estables entre re-renders
   const startsRef = useRef(
     Array.from({ length: count }).map(() => ({ x: rand(0, w), y: rand(0, h) }))
   );
   const starts = startsRef.current;
 
-  // clave estable para que React no remonte las partículas
   const ids = useMemo(() => Array.from({ length: count }).map((_, i) => `p-${i}`), [count]);
+
+  if (!active) return null;
 
   return (
     <div className="fixed inset-0 z-0 pointer-events-none">
       {ids.map((id, i) => (
         <Particle
           key={id}
-          i={i}
           w={w}
           h={h}
           cursorClass={cursorClass}

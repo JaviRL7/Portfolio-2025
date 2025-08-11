@@ -10,12 +10,18 @@ interface Props {
   skills: Skill[];
 }
 
+type Localized = { es?: string; en?: string } | string;
+
 export default function About({ theme, isHacker, stats, skills }: Props) {
   const { language } = useLanguage();
 
   const heading = isHacker
     ? language === "es" ? "PERFIL.exe" : "PROFILE.exe"
     : language === "es" ? "SOBRE MÍ" : "ABOUT ME";
+
+  const getDisplayName = (name: Localized, lang: "es" | "en") => {
+    return typeof name === "string" ? name : (name[lang] ?? name.en ?? "");
+  };
 
   return (
     <section className="py-20 px-4 relative z-10">
@@ -79,8 +85,7 @@ export default function About({ theme, isHacker, stats, skills }: Props) {
             className="space-y-6"
           >
             {skills.map((skill, index) => {
-              // skill.name es { es: string; en: string }
-              const displayName = (skill as any).name?.[language] ?? (skill as any).name?.en ?? (skill as any).name ?? "";
+              const displayName = getDisplayName(skill.name as Localized, language as "es" | "en");
               return (
                 <motion.div
                   key={`${displayName}-${index}`}

@@ -1,5 +1,5 @@
 "use client";
-import { useEffect, useState } from "react";
+import { useCallback, useEffect, useMemo, useState } from "react";
 import { playSound } from "./sounds";
 
 export function useEasterEggs() {
@@ -31,12 +31,13 @@ export function useEasterEggs() {
   const [showEasterEgg, setShowEasterEgg] = useState(false);
   const [secretMessage, setSecretMessage] = useState("");
 
-  const konamiSequence = [
-    "ArrowUp","ArrowUp","ArrowDown","ArrowDown","ArrowLeft","ArrowRight","ArrowLeft","ArrowRight","KeyB","KeyA",
-  ];
-  const cyberSequence = ["KeyC", "KeyY", "KeyB", "KeyE", "KeyR"];
+  // secuencias con referencia estable (evita warning de deps)
+  const konamiSequence = useMemo(
+    () => ["ArrowUp","ArrowUp","ArrowDown","ArrowDown","ArrowLeft","ArrowRight","ArrowLeft","ArrowRight","KeyB","KeyA"],
+    []
+  );
+  const cyberSequence = useMemo(() => ["KeyC", "KeyY", "KeyB", "KeyE", "KeyR"], []);
 
-  // 🖨️ Banner consola + mensajes
   useEffect(() => {
     // eslint-disable-next-line no-console
     console.log(`
@@ -69,17 +70,32 @@ export function useEasterEggs() {
     console.log("🎯 ¿Quieres trabajar conmigo? ¡Hablemos!");
   }, []);
 
-  // ⌨️ Teclado: Konami + CYBER + toggles de modos
+  const toggleFlag = useCallback((
+    flag: boolean,
+    setter: (v: boolean) => void,
+    sound: Parameters<typeof playSound>[0],
+    onMsg: string,
+    offMsg: string
+  ) => {
+    if (soundEnabled) playSound(sound);
+    setter(!flag);
+    setSecretMessage(flag ? offMsg : onMsg);
+    setShowEasterEgg(true);
+    setTimeout(() => setShowEasterEgg(false), 3000);
+  }, [soundEnabled]);
+
+  // teclado
   useEffect(() => {
     const handleKeyPress = (e: KeyboardEvent) => {
       setKonamiCode((prev) => {
         const seq = [...prev, e.code].slice(-10);
         if (JSON.stringify(seq) === JSON.stringify(konamiSequence)) {
-          soundEnabled && playSound("success");
+          if (soundEnabled) playSound("success");
           setMatrixMode(true);
           setSecretMessage("🎉 ¡KONAMI CODE ACTIVADO! ¡Eres un verdadero gamer! 🎮");
           setShowEasterEgg(true);
           setTimeout(() => setShowEasterEgg(false), 5000);
+          // eslint-disable-next-line no-console
           console.log("🎮 KONAMI CODE DETECTED! Matrix mode activated!");
         }
         return seq;
@@ -88,7 +104,7 @@ export function useEasterEggs() {
       setSecretCode((prev) => {
         const seq = [...prev, e.code].slice(-5);
         if (JSON.stringify(seq) === JSON.stringify(cyberSequence)) {
-          soundEnabled && playSound("game");
+          if (soundEnabled) playSound("game");
           setShowMiniGame(true);
           setSecretMessage("🎮 ¡CÓDIGO CYBER ACTIVADO! Mini-juego desbloqueado");
           setShowEasterEgg(true);
@@ -97,55 +113,34 @@ export function useEasterEggs() {
         return seq;
       });
 
-      const toggle = (
-        flag: boolean,
-        setter: (v: boolean) => void,
-        sound: string,
-        onMsg: string,
-        offMsg: string
-      ) => {
-        soundEnabled && playSound(sound);
-        setter(!flag);
-        setSecretMessage(flag ? offMsg : onMsg);
-        setShowEasterEgg(true);
-        setTimeout(() => setShowEasterEgg(false), 3000);
-      };
-
       switch (e.code) {
-        case "KeyM": toggle(matrixMode, setMatrixMode, "matrix", "🟢 Matrix mode ON", "🔴 Matrix mode OFF"); break;
-        case "KeyH": toggle(isHackerMode, setIsHackerMode, "hacker", "🕶️ Hacker mode ON", "👨‍💻 Hacker mode OFF"); break;
-        case "KeyR": toggle(retroMode, setRetroMode, "retro", "📼 ¡RETRO MODE ON! Welcome to the 80s!", "📼 Retro mode OFF"); break;
-        case "KeyC": toggle(cyberpunkMode, setCyberpunkMode, "cyberpunk", "🤖 ¡CYBERPUNK 2077 ACTIVATED!", "🤖 Cyberpunk mode OFF"); break;
-        case "KeyO": toggle(oceanMode, setOceanMode, "ocean", "🌊 ¡DEEP OCEAN MODE! Dive in!", "🌊 Ocean mode OFF"); break;
-        case "KeyF": toggle(fireMode, setFireMode, "fire", "🔥 ¡FIRE MODE! Things are heating up!", "🔥 Fire mode OFF"); break;
-        case "KeyT": toggle(rainbowMode, setRainbowMode, "rainbow", "🌈 ¡RAINBOW MODE! Taste the rainbow!", "🌈 Rainbow mode OFF"); break;
-        case "KeyD": toggle(devMode, setDevMode, "developer", "💻 ¡DEVELOPER MODE! Welcome to the matrix!", "💻 Developer mode OFF"); break;
+        case "KeyM": toggleFlag(matrixMode, setMatrixMode, "matrix", "🟢 Matrix mode ON", "🔴 Matrix mode OFF"); break;
+        case "KeyH": toggleFlag(isHackerMode, setIsHackerMode, "hacker", "🕶️ Hacker mode ON", "👨‍💻 Hacker mode OFF"); break;
+        case "KeyR": toggleFlag(retroMode, setRetroMode, "retro", "📼 ¡RETRO MODE ON! Welcome to the 80s!", "📼 Retro mode OFF"); break;
+        case "KeyC": toggleFlag(cyberpunkMode, setCyberpunkMode, "cyberpunk", "🤖 ¡CYBERPUNK 2077 ACTIVATED!", "🤖 Cyberpunk mode OFF"); break;
+        case "KeyO": toggleFlag(oceanMode, setOceanMode, "ocean", "🌊 ¡DEEP OCEAN MODE! Dive in!", "🌊 Ocean mode OFF"); break;
+        case "KeyF": toggleFlag(fireMode, setFireMode, "fire", "🔥 ¡FIRE MODE! Things are heating up!", "🔥 Fire mode OFF"); break;
+        case "KeyT": toggleFlag(rainbowMode, setRainbowMode, "rainbow", "🌈 ¡RAINBOW MODE! Taste the rainbow!", "🌈 Rainbow mode OFF"); break;
+        case "KeyD": toggleFlag(devMode, setDevMode, "developer", "💻 ¡DEVELOPER MODE! Welcome to the matrix!", "💻 Developer mode OFF"); break;
       }
     };
 
     window.addEventListener("keydown", handleKeyPress);
     return () => window.removeEventListener("keydown", handleKeyPress);
+  // deps completas y estables
   }, [
-    matrixMode,
-    isHackerMode,
-    retroMode,
-    cyberpunkMode,
-    oceanMode,
-    fireMode,
-    rainbowMode,
-    devMode,
-    soundEnabled,
+    matrixMode, isHackerMode, retroMode, cyberpunkMode, oceanMode, fireMode, rainbowMode, devMode,
+    soundEnabled, konamiSequence, cyberSequence, toggleFlag
   ]);
 
-  // ⏱️ Tiempo + 📜 Scroll (incluye milestones y mensaje de 100 scrolls)
+  // tiempo + scroll
   useEffect(() => {
     const timer = setInterval(() => setTimeSpent((p) => p + 1), 1000);
-
     const handleScroll = () => {
       setScrollCount((p) => {
         const next = p + 1;
         if (next === 100) {
-          soundEnabled && playSound("success");
+          if (soundEnabled) playSound("success");
           setSecretMessage("🌊 ¡SCROLL MASTER! Has hecho scroll 100 veces");
           setShowEasterEgg(true);
           setTimeout(() => setShowEasterEgg(false), 4000);
@@ -153,7 +148,6 @@ export function useEasterEggs() {
         return next;
       });
     };
-
     window.addEventListener("scroll", handleScroll);
     return () => {
       clearInterval(timer);
@@ -161,16 +155,16 @@ export function useEasterEggs() {
     };
   }, [soundEnabled]);
 
-  // Hitos de tiempo (1 min y 5 min con partículas)
+  // hitos de tiempo
   useEffect(() => {
     if (timeSpent === 60) {
-      soundEnabled && playSound("success");
+      if (soundEnabled) playSound("success");
       setSecretMessage("⏰ ¡Has estado aquí 1 minuto! ¿Te gusta lo que ves?");
       setShowEasterEgg(true);
       setTimeout(() => setShowEasterEgg(false), 4000);
     }
     if (timeSpent === 300) {
-      soundEnabled && playSound("rainbow");
+      if (soundEnabled) playSound("rainbow");
       setParticlesActive(true);
       setSecretMessage("✨ ¡5 minutos! Activando partículas especiales...");
       setShowEasterEgg(true);
@@ -178,35 +172,35 @@ export function useEasterEggs() {
     }
   }, [timeSpent, soundEnabled]);
 
-  // 🖱️ Posición del mouse (cursor custom)
+  // mouse
   useEffect(() => {
     const updateMousePosition = (e: MouseEvent) => setMousePosition({ x: e.clientX, y: e.clientY });
     window.addEventListener("mousemove", updateMousePosition);
     return () => window.removeEventListener("mousemove", updateMousePosition);
   }, []);
 
-  // 👤 Clicks en avatar (con fix de estado funcional)
+  // handlers
   const handleAvatarClick = () => {
-    soundEnabled && playSound("click");
+    if (soundEnabled) playSound("click");
     setClickCount((prev) => {
       const next = prev + 1;
       if (next === 10) {
-        soundEnabled && playSound("success");
+        if (soundEnabled) playSound("success");
         setSecretMessage("🤖 ¡SISTEMA SOBRECARGADO! ¡Has clickeado demasiado! 🔥");
         setShowEasterEgg(true);
         setTimeout(() => {
           setShowEasterEgg(false);
           setClickCount(0);
         }, 3000);
+        // eslint-disable-next-line no-console
         console.log("🤖 Avatar overload detected!");
       }
       return next;
     });
   };
 
-  // ☕ Café (con logs divertidos)
   const handleCoffeeClick = () => {
-    soundEnabled && playSound("coffee");
+    if (soundEnabled) playSound("coffee");
     setCoffeeCount((prev) => {
       const next = prev + 1;
       const messages = [
@@ -216,31 +210,31 @@ export function useEasterEggs() {
         "☕☕☕☕ ¡Peligro! Nivel de cafeína crítico",
         "☕☕☕☕☕ ¡ALERTA! ¡El desarrollador está vibrando!",
       ];
+      // eslint-disable-next-line no-console
       console.log(messages[Math.min(next - 1, 4)]);
       return next;
     });
   };
 
-  // ✌️ Doble click
   const handleDoubleClick = () => {
-    soundEnabled && playSound("click");
+    if (soundEnabled) playSound("click");
     setDoubleClickCount((prev) => {
       const next = prev + 1;
       if (next === 5) {
-        soundEnabled && playSound("success");
+        if (soundEnabled) playSound("success");
         setParticlesActive(true);
         setSecretMessage("✨ ¡DOUBLE CLICK MASTER! Partículas activadas");
         setShowEasterEgg(true);
         setTimeout(() => setShowEasterEgg(false), 4000);
+        // eslint-disable-next-line no-console
         console.log("✨ Double click master detected!");
       }
       return next;
     });
   };
 
-  // 🎮 Mini-juego
   const playMiniGame = () => {
-    soundEnabled && playSound("game");
+    if (soundEnabled) playSound("game");
     const score = Math.floor(Math.random() * 1000) + 500;
     setGameScore(score);
     setSecretMessage(`🎮 ¡Puntuación: ${score}! ${score > 800 ? "¡INCREÍBLE!" : "¡Bien jugado!"}`);
@@ -252,39 +246,11 @@ export function useEasterEggs() {
   };
 
   return {
-    // estados
-    mousePosition,
-    konamiCode,
-    secretCode,
-    matrixMode,
-    isHackerMode,
-    retroMode,
-    cyberpunkMode,
-    oceanMode,
-    fireMode,
-    rainbowMode,
-    devMode,
-    clickCount,
-    coffeeCount,
-    doubleClickCount,
-    timeSpent,
-    scrollCount,
-    particlesActive,
-    showMiniGame,
-    gameScore,
-    soundEnabled,
-    showEasterEgg,
-    secretMessage,
-
-    // setters
-    setShowMiniGame,
-    setSoundEnabled,
-    setParticlesActive,
-
-    // handlers
-    handleAvatarClick,
-    handleCoffeeClick,
-    handleDoubleClick,
-    playMiniGame,
+    mousePosition, konamiCode, secretCode,
+    matrixMode, isHackerMode, retroMode, cyberpunkMode, oceanMode, fireMode, rainbowMode, devMode,
+    clickCount, coffeeCount, doubleClickCount, timeSpent, scrollCount, particlesActive,
+    showMiniGame, gameScore, soundEnabled, showEasterEgg, secretMessage,
+    setShowMiniGame, setSoundEnabled, setParticlesActive,
+    handleAvatarClick, handleCoffeeClick, handleDoubleClick, playMiniGame,
   } as const;
 }
