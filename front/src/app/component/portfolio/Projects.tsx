@@ -3,7 +3,7 @@ import { motion } from "framer-motion";
 import { Card, CardContent } from "@/components/ui/card";
 import type { ProjectItem } from "@/lib/portfolio/types";
 import { useLanguage } from "@/context/useLanguage";
-
+import Image from "next/image";
 interface Props {
   theme: { primary: string; secondary: string; accent: string; border: string };
   isHacker: boolean;
@@ -49,9 +49,11 @@ export default function Projects({ theme, isHacker, projects }: Props) {
           className={`overflow-hidden transition-all duration-300 bg-gray-900/50 backdrop-blur-sm border ${theme.border} flex flex-col h-full`}
         >
           <div className="relative overflow-hidden">
-            <img
+            <Image
               src={p.image || "/placeholder.svg"}
               alt={title}
+              width={500}
+              height={500}
               className="w-full h-48 object-cover transition-transform duration-300 group-hover:scale-110"
             />
             <div className="absolute inset-0 bg-gradient-to-t from-black/60 to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-300" />

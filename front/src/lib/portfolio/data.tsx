@@ -82,7 +82,7 @@ export const projects: ProjectItem[] = [
     "Swagger"
   ],
   image: "/punkypet.png",
-  link: "#",
+  link: "https://github.com/Joaco-Martinez/eComerceAnimals",
 },
 
   {
@@ -108,7 +108,7 @@ export const projects: ProjectItem[] = [
     "Swiper"
   ],
   image: "/Kasapp.png",
-  link: "#",
+  link: "https://github.com/Joaco-Martinez/KasApp",
 },
   {
   title: { es: "ManzanaTech", en: "ManzanaTech" },
@@ -128,7 +128,7 @@ export const projects: ProjectItem[] = [
     "Classnames"
   ],
   image: "/manzanatech.png",
-  link: "#",
+  link: "https://github.com/Joaco-Martinez/FrontEnd-PM4",
 },
   {
   title: { es: "Trip Moon", en: "Trip Moon" },
@@ -148,6 +148,6 @@ export const projects: ProjectItem[] = [
     "PostgreSQL"
   ],
   image: "/Tripmoon.png",
-  link: "#",
+  link: "https://github.com/Joaco-Martinez/PM3",
 },
 ];
