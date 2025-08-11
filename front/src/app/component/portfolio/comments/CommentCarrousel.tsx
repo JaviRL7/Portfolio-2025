@@ -2,7 +2,8 @@
 import { useState } from "react";
 import { useKeenSlider } from "keen-slider/react";
 import "keen-slider/keen-slider.min.css";
-import type { KeenSliderInstance } from "keen-slider/react";
+// el tipo va desde "keen-slider", no desde "keen-slider/react"
+import type { KeenSliderInstance } from "keen-slider";
 import { ChevronLeft, ChevronRight } from "lucide-react";
 import CommentCard from "./CommentCard";
 import type { CommentItem, Theme } from "./types";
