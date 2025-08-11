@@ -30,51 +30,53 @@ export default function Projects({ theme, isHacker, projects }: Props) {
           {heading}
         </motion.h2>
 
-        <div className="grid md:grid-cols-2 lg:grid-cols-3 gap-8">
-          {projects.map((p, index) => {
-            const title = p.title?.[language] ?? p.title?.en ?? p.title?.es ?? "";
-            const description = p.description?.[language] ?? p.description?.en ?? p.description?.es ?? "";
+        <div className="grid md:grid-cols-2 lg:grid-cols-3 gap-8 items-stretch">
+  {projects.map((p, index) => {
+    const title = p.title?.[language] ?? p.title?.en ?? p.title?.es ?? "";
+    const description = p.description?.[language] ?? p.description?.en ?? p.description?.es ?? "";
 
-            return (
-              <motion.div
-                key={`${title}-${index}`}
-                initial={{ opacity: 0, y: 50 }}
-                whileInView={{ opacity: 1, y: 0 }}
-                transition={{ duration: 0.8, delay: index * 0.2 }}
-                viewport={{ once: true }}
-                whileHover={{ scale: 1.05 }}
-                className="group"
-              >
-                <Card className={`overflow-hidden transition-all duration-300 bg-gray-900/50 backdrop-blur-sm border ${theme.border}`}>
-                  <div className="relative overflow-hidden">
-                    <img
-                      src={p.image || "/placeholder.svg"}
-                      alt={title}
-                      className="w-full h-48 object-cover transition-transform duration-300 group-hover:scale-110"
-                    />
-                    <div className="absolute inset-0 bg-gradient-to-t from-black/60 to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-300" />
-                  </div>
-                  <CardContent className="p-6">
-                    <h3 className="text-xl font-bold text-white mb-2">
-                      {isHacker ? `${title}.exe` : title}
-                    </h3>
-                    <p className="text-gray-400 mb-4">{description}</p>
-                    <div className="flex flex-wrap gap-2">
-                      {p.tech.map((t) => (
-                        <span
-                          key={t}
-                          className={`px-3 py-1 rounded-full text-sm bg-gradient-to-r ${theme.secondary}/20 border ${theme.border} ${theme.accent}`}
-                        >
-                          {t}
-                        </span>
-                      ))}
-                    </div>
-                  </CardContent>
-                </Card>
-              </motion.div>
-            );
-          })}
-        </div>
+    return (
+      <motion.div
+        key={`${title}-${index}`}
+        initial={{ opacity: 0, y: 50 }}
+        whileInView={{ opacity: 1, y: 0 }}
+        transition={{ duration: 0.8, delay: index * 0.2 }}
+        viewport={{ once: true }}
+        whileHover={{ scale: 1.05 }}
+        className="group h-full"
+      >
+        <Card
+          className={`overflow-hidden transition-all duration-300 bg-gray-900/50 backdrop-blur-sm border ${theme.border} flex flex-col h-full`}
+        >
+          <div className="relative overflow-hidden">
+            <img
+              src={p.image || "/placeholder.svg"}
+              alt={title}
+              className="w-full h-48 object-cover transition-transform duration-300 group-hover:scale-110"
+            />
+            <div className="absolute inset-0 bg-gradient-to-t from-black/60 to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-300" />
+          </div>
+          <CardContent className="p-6 flex flex-col flex-1">
+            <h3 className="text-xl font-bold text-white mb-2">
+              {isHacker ? `${title}.exe` : title}
+            </h3>
+            <p className="text-gray-400 mb-4 flex-1">{description}</p>
+            <div className="flex flex-wrap gap-2 mt-auto">
+              {p.tech.map((t) => (
+                <span
+                  key={t}
+                  className={`px-3 py-1 rounded-full text-sm bg-gradient-to-r ${theme.secondary}/20 border ${theme.border} ${theme.accent}`}
+                >
+                  {t}
+                </span>
+              ))}
+            </div>
+          </CardContent>
+        </Card>
+      </motion.div>
+    );
+  })}
+</div>
       </div>
     </section>
   );

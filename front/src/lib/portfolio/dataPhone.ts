@@ -1,0 +1,1 @@
+export const phone = "https://api.whatsapp.com/send?phone=543517474105&text=Hola%20Joaquín%2C%20vi%20tu%20portfolio%20y%20me%20gustaría%20hablar%20sobre%20un%20proyecto."

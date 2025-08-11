@@ -4,7 +4,7 @@ export const THEMES: Record<ThemeKey, ThemeColors> = {
   default: {
     primary: "from-indigo-400 via-violet-500 to-fuchsia-500",
     secondary: "from-cyan-400 to-indigo-500",
-    accent: "text-violet-300",
+    accent: 	"text-gray-100", 
     border: "border-violet-400/30 hover:border-fuchsia-400/60",
     bg: "bg-[#0b0f19]", // navy oscuro elegante
     cursor: "bg-fuchsia-400",
@@ -38,7 +38,7 @@ export const THEMES: Record<ThemeKey, ThemeColors> = {
     secondary: "from-violet-600 to-cyan-500",
     accent: "text-fuchsia-300",
     border: "border-fuchsia-500/30 hover:border-cyan-400/60",
-    bg: "bg-gradient-to-br from-[#0a0014] to-[#00121c]", // magenta→cian oscuro
+    bg: "bg-gradient-to-br from-[#0a0014] to-[#00121c]", 
     cursor: "bg-cyan-400",
   },
   ocean: {

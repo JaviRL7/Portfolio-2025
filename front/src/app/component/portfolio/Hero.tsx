@@ -41,18 +41,26 @@ export default function Hero({
         <AvatarHero
   onAvatarClick={onAvatarClick}
   clickCount={clickCount}
-  avatarSrc="/joaco-avatar.png" // o tu URL de Cloudinary
+  avatarSrc="/image.png" // o tu URL de Cloudinary
 />
 
         {/* Título */}
         <motion.h1
-          className={`text-6xl md:text-8xl font-bold mb-6 bg-clip-text text-transparent transition-all duration-1000 bg-gradient-to-r ${theme.primary}`}
-          initial={{ scale: 0.5 }}
-          animate={{ scale: 1 }}
-          transition={{ duration: 0.8, delay: 0.2 }}
-        >
-          {isHacker ? "H4CK3R_M0D3" : "JOAQUIN MARTINEZ"}
-        </motion.h1>
+  className="text-6xl md:text-8xl font-bold mb-6 bg-clip-text text-transparent"
+  initial={{ scale: 0.5 }}
+  animate={{ scale: 1 }}
+  transition={{ duration: 0.8, delay: 0.2 }}
+>
+  <motion.span
+    className={`inline-block bg-clip-text text-transparent bg-gradient-to-r ${theme.primary}`}
+    initial={{ backgroundPosition: "0% 0%" }}
+    animate={{ backgroundPosition: "100% 0%" }}   // izquierda → derecha
+    transition={{ duration: 6, repeat: Infinity, ease: "linear" }}
+    style={{ backgroundSize: "200% 100%" }}       // “tela” para mover
+  >
+    {isHacker ? "H4CK3R_M0D3" : "JOAQUIN MARTINEZ"}
+  </motion.span>
+</motion.h1>
 
         {/* Subtítulo */}
         <motion.p

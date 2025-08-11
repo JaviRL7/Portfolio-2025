@@ -3,12 +3,12 @@ import { motion } from "framer-motion";
 import { Github, Linkedin, Mail, Heart } from "lucide-react";
 import { FaWhatsapp } from "react-icons/fa";
 import { useLanguage } from "@/context/useLanguage";
-
+import {phone} from "@/lib/portfolio/dataPhone";
 interface Props {
   theme: { primary: string; border: string; accent: string };
   isHacker: boolean;
 }
-
+console.log(phone);
 export default function Contact({ theme, isHacker }: Props) {
   const { language } = useLanguage();
 
@@ -28,25 +28,25 @@ export default function Contact({ theme, isHacker }: Props) {
     {
       icon: <Github className="w-6 h-6" />,
       label: language === "es" ? "GitHub" : "GitHub",
-      href: "#",
+      href: "https://github.com/Joaco-Martinez",
       hover: "hover:text-gray-400",
     },
     {
       icon: <Linkedin className="w-6 h-6" />,
       label: language === "es" ? "LinkedIn" : "LinkedIn",
-      href: "#",
+      href: "https://www.linkedin.com/in/joaquin-martinez-0669642aa",
       hover: "hover:text-blue-400",
     },
     {
       icon: <FaWhatsapp className="w-6 h-6" />,
       label: language === "es" ? "WhatsApp" : "WhatsApp",
-      href: "#", // Ej: `https://wa.me/549XXXXXXXXX`
+      href: phone, // Ej: `https://wa.me/549XXXXXXXXX`
       hover: "hover:text-green-400",
     },
     {
       icon: <Mail className="w-6 h-6" />,
       label: language === "es" ? "Correo" : "Email",
-      href: "#", // Ej: `mailto:tuemail@dominio.com`
+      href: "mailto:joaco.martinnez1480@gmail.com", // Ej: `mailto:tuemail@dominio.com`
       hover: "hover:text-purple-400",
     },
   ];
