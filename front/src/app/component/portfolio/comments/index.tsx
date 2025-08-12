@@ -83,9 +83,64 @@ export default function Comments({
     }
   }
 
+  const count = comments.length;
+  const countLabel =
+    language === "es"
+      ? `${count} comentario${count === 1 ? "" : "s"}`
+      : `${count} comment${count === 1 ? "" : "s"}`;
+
   return (
     <section className="py-20 px-4 relative z-10">
       <div className="max-w-5xl mx-auto">
+        {/* ---- Counter pill ---- */}
+        <div className="w-full flex items-center justify-center mb-8">
+          <div className="relative group">
+            {/* Glow */}
+            <div
+              className="absolute -inset-[2px] rounded-2xl bg-gradient-to-r from-indigo-500/40 via-violet-500/40 to-fuchsia-500/40 blur-sm opacity-60 group-hover:opacity-90 transition-opacity duration-300"
+              aria-hidden="true"
+            />
+            {/* Content */}
+            <div className="relative rounded-2xl border border-white/10 bg-white/5 backdrop-blur-sm px-4 sm:px-5 py-2.5 sm:py-3 flex items-center gap-3 shadow-[0_8px_30px_rgba(0,0,0,0.25)]">
+              {/* Icono inline para evitar deps */}
+              <svg
+                className="w-4 h-4 sm:w-5 sm:h-5 opacity-90"
+                viewBox="0 0 24 24"
+                fill="none"
+                aria-hidden="true"
+              >
+                <path
+                  d="M7 8h10M7 12h7M5 20l3-3h9a3 3 0 0 0 3-3V7a3 3 0 0 0-3-3H7a3 3 0 0 0-3 3v11l1.8-1.8"
+                  stroke="currentColor"
+                  strokeWidth="1.6"
+                  strokeLinecap="round"
+                  strokeLinejoin="round"
+                  className="text-gray-200"
+                />
+              </svg>
+
+              <div className="flex items-baseline gap-2">
+                <span className={`text-xs sm:text-sm tracking-wide ${theme.accent}`}>
+                  {language === "es" ? "Firmas" : "Signatures"}
+                </span>
+                <span className="text-lg sm:text-xl font-semibold tabular-nums text-gray-100">
+                  {count.toLocaleString()}
+                </span>
+                <span className="hidden sm:inline text-sm text-gray-300/80">
+                  • {countLabel}
+                </span>
+              </div>
+
+              {/* Dot status */}
+              <span className="ml-2 inline-flex items-center gap-1 text-xs text-emerald-300">
+                <span className="w-1.5 h-1.5 rounded-full bg-emerald-400 animate-pulse" />
+                {language === "es" ? "en vivo" : "live"}
+              </span>
+            </div>
+          </div>
+        </div>
+        {/* ---- /Counter pill ---- */}
+
         <CommentsForm
           theme={theme}
           isHacker={isHacker}
