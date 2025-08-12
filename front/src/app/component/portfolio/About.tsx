@@ -7,6 +7,7 @@ interface Props {
   theme: { primary: string; secondary: string; accent: string; border: string };
   isHacker: boolean;
   stats: { coffee: number; clicks: number; timeSpent: number; scrolls: number; gameScore: number; activeFlags: number };
+  /** Reutilizamos tu estructura: skill.level = % de uso */
   skills: Skill[];
 }
 
@@ -23,6 +24,13 @@ export default function About({ theme, isHacker, stats, skills }: Props) {
     return typeof name === "string" ? name : (name[lang] ?? name.en ?? "");
   };
 
+  const usageLabel =
+    language === "es" ? "Frecuencia de uso (últimos 12 meses)" : "Usage frequency (last 12 months)";
+  const legendNote =
+    language === "es"
+      ? "Estos porcentajes reflejan con qué frecuencia uso cada tecnología en mis proyectos recientes (no equivalen a nivel de dominio)."
+      : "Percentages reflect how often I use each technology in recent projects (not a mastery level).";
+
   return (
     <section className="py-20 px-4 relative z-10">
       <div className="max-w-6xl mx-auto">
@@ -37,6 +45,7 @@ export default function About({ theme, isHacker, stats, skills }: Props) {
         </motion.h2>
 
         <div className="grid md:grid-cols-2 gap-12 items-center">
+          {/* Texto */}
           <motion.div
             initial={{ opacity: 0, x: -50 }}
             whileInView={{ opacity: 1, x: 0 }}
@@ -49,21 +58,21 @@ export default function About({ theme, isHacker, stats, skills }: Props) {
                 <p className="text-lg text-gray-300 leading-relaxed mb-6">
                   {isHacker
                     ? (language === "es"
-                        ? "system.log → Full Stack Developer especializado en infiltraciones creativas en la capa frontend. Dominio de React.exe, Next.js protocols y TypeScript compiler. Backend blindado con Node.js + Prisma + PostgreSQL."
-                        : "system.log → Full Stack Developer specialized in creative infiltrations on the frontend layer. Mastery of React.exe, Next.js protocols, and the TypeScript compiler. Backend hardened with Node.js + Prisma + PostgreSQL.")
+                        ? "system.log → Full Stack orientado a crear interfaces con identidad propia en la capa frontend y producto sólido end-to-end."
+                        : "system.log → Full Stack focused on building bold frontends and solid end-to-end products.")
                     : (language === "es"
-                        ? "Desarrollador full stack apasionado por crear experiencias digitales únicas e innovadoras. Especializado en frontend con React, Next.js y TypeScript, complementado con un backend sólido en Node.js, Prisma y PostgreSQL."
-                        : "Full stack developer passionate about creating unique and innovative digital experiences. Specialized in frontend with React, Next.js, and TypeScript, complemented by a solid backend in Node.js, Prisma, and PostgreSQL.")}
+                        ? "Desarrollador full stack enfocado en rendimiento, UX y micro-interacciones que suman valor al producto."
+                        : "Full-stack developer focused on performance, UX, and delightful micro-interactions.")}
                 </p>
 
                 <p className="text-lg text-gray-300 leading-relaxed">
                   {isHacker
                     ? (language === "es"
-                        ? "mission.status → Construir aplicaciones que hackeen la mente del usuario, fusionando interfaces futuristas con experiencias inmersivas y alto rendimiento."
-                        : "mission.status → Build applications that hack the user’s mind, blending futuristic interfaces with immersive experiences and high performance.")
+                        ? "mission.status → Prototipos rápidos, interfaces fluidas y código mantenible."
+                        : "mission.status → Rapid prototyping, fluid interfaces, and maintainable code.")
                     : (language === "es"
-                        ? "Mi objetivo es desarrollar aplicaciones que combinen rendimiento impecable con interfaces futuristas, cautivando e inspirando a los usuarios en cada interacción."
-                        : "My goal is to develop applications that combine flawless performance with futuristic interfaces, captivating and inspiring users in every interaction.")}
+                        ? "Mi objetivo: prototipar rápido, entregar interfaces fluidas y mantener un código claro."
+                        : "Goal: prototype fast, ship fluid interfaces, and keep the codebase clean.")}
                 </p>
 
                 <div className="mt-6 text-sm text-gray-500 space-y-1">
@@ -77,13 +86,17 @@ export default function About({ theme, isHacker, stats, skills }: Props) {
             </div>
           </motion.div>
 
+          {/* Barras de uso (no “skills”) */}
           <motion.div
             initial={{ opacity: 0, x: 50 }}
             whileInView={{ opacity: 1, x: 0 }}
             transition={{ duration: 0.8 }}
             viewport={{ once: true }}
             className="space-y-6"
+            aria-label={usageLabel}
           >
+            <div className="mb-2 text-sm text-gray-400">{usageLabel}</div>
+
             {skills.map((skill, index) => {
               const displayName = getDisplayName(skill.name as Localized, language as "es" | "en");
               return (
@@ -97,14 +110,17 @@ export default function About({ theme, isHacker, stats, skills }: Props) {
                 >
                   <div className="flex items-center justify-between mb-2">
                     <div className="flex items-center gap-3">
-                      <div className={theme.accent}>{skill.icon}</div>
+                      <div className={theme.accent} aria-hidden>{skill.icon}</div>
                       <span className="text-white font-semibold">
-                        {isHacker ? `${displayName}.dll` : displayName}
+                        {isHacker ? `${displayName}.log` : displayName}
                       </span>
                     </div>
-                    <span className={`font-bold ${theme.accent}`}>{skill.level}%</span>
+                    {/* Antes decía “level%”. Ahora explicitamos que es uso */}
+                    <span className={`font-bold ${theme.accent}`}>
+                      {language === "es" ? "Uso: " : "Use: "}{skill.level}%
+                    </span>
                   </div>
-                  <div className="h-2 bg-gray-800 rounded-full overflow-hidden">
+                  <div className="h-2 bg-gray-800 rounded-full overflow-hidden" role="progressbar" aria-valuenow={skill.level} aria-valuemin={0} aria-valuemax={100} aria-label={`${displayName} ${usageLabel}`}>
                     <motion.div
                       className={`h-full rounded-full bg-gradient-to-r ${theme.secondary}`}
                       initial={{ width: 0 }}
@@ -116,6 +132,10 @@ export default function About({ theme, isHacker, stats, skills }: Props) {
                 </motion.div>
               );
             })}
+
+            <p className="text-xs text-gray-500 mt-4">
+              {legendNote}
+            </p>
           </motion.div>
         </div>
       </div>
