@@ -34,7 +34,7 @@ export default function PortfolioPage() {
 
   useEffect(() => {
   const start = performance.now();
-  const D = 4200; // tu duración mínima
+  const D = 2500; // tu duración mínima
   let raf = 0;
   const loop = (now: number) => {
     const f = Math.min((now - start) / D, 1);

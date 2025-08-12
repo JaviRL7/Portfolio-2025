@@ -1,9 +1,41 @@
 // src/lib/portfolio/sounds.ts
+// Sonidos sintéticos limpios (sin 8-bit), con cadena de FX y ADSR.
+// API: playSound(type, { volume?, duration? }), setSoundVolume, getSoundVolume, resetSoundVolume, unlockAudio.
+
 type SoundType =
   | "matrix" | "hacker" | "retro" | "cyberpunk" | "ocean" | "fire"
   | "rainbow" | "developer" | "success" | "click" | "coffee" | "game";
 
 type CtxCtor = typeof AudioContext;
+
+/* ===================== Contexto y Master ===================== */
+
+const MASTER_MAX = 10;
+let MASTER_VOLUME = 1;
+
+declare global {
+  interface Window {
+    __audioCtx?: AudioContext;
+    __masterGain?: GainNode;
+    __fxBus?: GainNode;
+    __comp?: DynamicsCompressorNode;
+    __reverb?: ConvolverNode; // <-- corregido
+  }
+}
+
+// Generador de ruido blanco
+function makeNoise(ctx: AudioContext) {
+  const bufferSize = 2 * ctx.sampleRate;
+  const buffer = ctx.createBuffer(1, bufferSize, ctx.sampleRate);
+  const output = buffer.getChannelData(0);
+  for (let i = 0; i < bufferSize; i++) {
+    output[i] = Math.random() * 2 - 1; // rango -1 a 1
+  }
+  const noise = ctx.createBufferSource();
+  noise.buffer = buffer;
+  noise.loop = true;
+  return noise;
+}
 
 function getAudioContextCtor(): CtxCtor | null {
   if (typeof window === "undefined") return null;
@@ -11,29 +43,73 @@ function getAudioContextCtor(): CtxCtor | null {
   return w.AudioContext ?? w.webkitAudioContext ?? null;
 }
 
-/** Máximo permitido para el volumen maestro (podés subirlo si querés). */
-const MASTER_MAX = 10;
+function ensureCtx() {
+  const Ctx = getAudioContextCtor();
+  if (!Ctx) return null;
+  if (!window.__audioCtx) {
+    const ctx = new Ctx();
 
-/** Multiplicador global adicional para “empujar” todos los sonidos. */
-const BASE_MULT = 3; // probá 2–4 si querés menos/ más fuerte
+    // Master chain: [sources] -> fxBus -> compressor -> masterGain -> destination
+    const fxBus = ctx.createGain();
+    const comp = ctx.createDynamicsCompressor();
+    comp.threshold.setValueAtTime(-18, ctx.currentTime);
+    comp.knee.setValueAtTime(24, ctx.currentTime);
+    comp.ratio.setValueAtTime(2.5, ctx.currentTime);
+    comp.attack.setValueAtTime(0.005, ctx.currentTime);
+    comp.release.setValueAtTime(0.12, ctx.currentTime);
 
-/** Volumen maestro (0..MASTER_MAX). Se persiste en localStorage. */
-let MASTER_VOLUME = 1;
+    const masterGain = ctx.createGain();
+    masterGain.gain.setValueAtTime(MASTER_VOLUME / MASTER_MAX, ctx.currentTime);
+
+    fxBus.connect(comp).connect(masterGain).connect(ctx.destination);
+
+    // Reverb muy corta (impulso sintético), mezclada a -18 dB aprox
+    const reverb = ctx.createConvolver(); // ConvolverNode
+    reverb.buffer = makeShortImpulse(ctx, 0.11, 1.6); // (duración, decaimiento)
+    const rvMix = ctx.createGain();
+    rvMix.gain.setValueAtTime(0.13, ctx.currentTime); // mezcla sutil
+    reverb.connect(rvMix).connect(masterGain);
+
+    window.__audioCtx = ctx;
+    window.__masterGain = masterGain;
+    window.__fxBus = fxBus;
+    window.__comp = comp;
+    window.__reverb = reverb;
+  }
+  return window.__audioCtx!;
+}
+
+// Impulso corto para “aire” sutil (no reverb notoria)
+function makeShortImpulse(ctx: AudioContext, duration = 0.12, decay = 1.6) {
+  const rate = ctx.sampleRate;
+  const len = Math.max(1, Math.floor(duration * rate));
+  const impulse = ctx.createBuffer(2, len, rate);
+  for (let ch = 0; ch < 2; ch++) {
+    const data = impulse.getChannelData(ch);
+    for (let i = 0; i < len; i++) {
+      const t = i / len;
+      // ruido con caída exponencial suave
+      data[i] = (Math.random() * 2 - 1) * Math.pow(1 - t, decay) * 0.6;
+    }
+  }
+  return impulse;
+}
+
+/* ===================== Volumen persistente ===================== */
 
 (function initVolume() {
   if (typeof window === "undefined") return;
   const raw = localStorage.getItem("sound:volume");
   if (raw != null) {
-    const saved = Number(raw);
-    if (!Number.isNaN(saved)) {
-      MASTER_VOLUME = Math.min(MASTER_MAX, Math.max(0, saved));
-    }
+    const v = Number(raw);
+    if (!Number.isNaN(v)) MASTER_VOLUME = Math.min(MASTER_MAX, Math.max(0, v));
   }
 })();
 
 export function setSoundVolume(v: number) {
   MASTER_VOLUME = Math.min(MASTER_MAX, Math.max(0, v));
-  if (typeof window !== "undefined") {
+  if (typeof window !== "undefined" && window.__audioCtx && window.__masterGain) {
+    window.__masterGain.gain.setValueAtTime(MASTER_VOLUME / MASTER_MAX, window.__audioCtx.currentTime);
     localStorage.setItem("sound:volume", String(MASTER_VOLUME));
   }
 }
@@ -46,180 +122,301 @@ export function resetSoundVolume() {
   setSoundVolume(1);
 }
 
-type PlayOptions = {
-  /** Multiplicador puntual 0..∞ (además del master). */
-  volume?: number;
-  /** Duración del beep (seg). */
-  duration?: number;
-};
+/* ===================== Helpers de síntesis ===================== */
 
-/** Volúmenes base por tipo. */
-const BASE_VOL: Record<SoundType, number> = {
-  matrix: 0.03,
-  hacker: 0.02,
-  retro: 0.025,
-  cyberpunk: 0.02,
-  ocean: 0.015,
-  fire: 0.02,
-  rainbow: 0.02,
-  developer: 0.015,
-  success: 0.025,
-  click: 0.01,
-  coffee: 0.012,
-  game: 0.02,
-};
+type PlayOptions = { volume?: number; duration?: number };
 
-/** Generador de “cuerpo” (dos osciladores levemente desafinados) */
-function setupDualOsc(context: AudioContext) {
-  const osc1 = context.createOscillator();
-  const osc2 = context.createOscillator();
-  const merger = context.createGain();
+function time(ctx: AudioContext) { return ctx.currentTime; }
 
-  osc1.connect(merger);
-  osc2.connect(merger);
-
-  // leve desafinación para sensación de más volumen
-  osc1.detune.setValueAtTime(-5, context.currentTime);
-  osc2.detune.setValueAtTime(5, context.currentTime);
-
-  return { osc1, osc2, merger };
+function lp(ctx: AudioContext, cutoff = 4000, q = 0.8) {
+  const f = ctx.createBiquadFilter();
+  f.type = "lowpass";
+  f.frequency.value = cutoff;
+  f.Q.value = q;
+  return f;
 }
 
-export const playSound = (type: SoundType, opts: PlayOptions = {}) => {
-  const Ctx = getAudioContextCtor();
-  if (!Ctx) return;
+function hp(ctx: AudioContext, cutoff = 80) {
+  const f = ctx.createBiquadFilter();
+  f.type = "highpass";
+  f.frequency.value = cutoff;
+  return f;
+}
 
-  const duration = typeof opts.duration === "number" ? Math.max(0.05, opts.duration) : 0.5;
+// ADSR lineal suave
+function adsr(g: GainNode, ctx: AudioContext, dur: number, a=0.015, d=0.08, s=0.65, r=0.14, peak=1) {
+  const t0 = time(ctx);
+  const tA = t0 + a;
+  const tD = tA + d;
+  const tR = t0 + dur;
+  g.gain.cancelScheduledValues(t0);
+  g.gain.setValueAtTime(0.0001, t0);
+  g.gain.linearRampToValueAtTime(peak, tA);
+  g.gain.linearRampToValueAtTime(peak * s, tD);
+  g.gain.setValueAtTime(peak * s, Math.max(tD, tR - r));
+  g.gain.linearRampToValueAtTime(0.0001, tR);
+}
 
-  // volumen final = base × BASE_MULT × master × puntual
-  const finalVol = (BASE_VOL[type] ?? 0.02) * BASE_MULT * MASTER_VOLUME * (opts.volume ?? 1);
+// LFO vibrato sutil
+function vibrato(ctx: AudioContext, target: AudioParam, rateHz = 5, amount = 4) {
+  const lfo = ctx.createOscillator();
+  const g = ctx.createGain();
+  lfo.type = "sine";
+  lfo.frequency.value = rateHz;
+  g.gain.value = amount;
+  lfo.connect(g).connect(target);
+  lfo.start();
+  return () => { try { lfo.stop(); } catch {} };
+}
 
-  try {
-    const audioContext = new Ctx();
+// Doble oscilador para “cuerpo” sin aspereza
+function dualOsc(ctx: AudioContext, type: OscillatorType = "sine", detune = 3) {
+  const a = ctx.createOscillator();
+  const b = ctx.createOscillator();
+  a.type = type; b.type = type;
+  a.detune.value = -detune; b.detune.value = detune;
+  return { a, b };
+}
 
-    // dos osciladores + un gain final
-    const { osc1, osc2, merger } = setupDualOsc(audioContext);
-    const gain = audioContext.createGain();
+// Envía una fuente a la cadena: HP -> LP -> (send reverb) -> fxBus
+function routeThroughFX(ctx: AudioContext, src: AudioNode, vol=1) {
+  const pre = hp(ctx, 65);
+  const post = lp(ctx, 3300, 0.9);
+  const out = ctx.createGain(); out.gain.value = vol;
 
-    merger.connect(gain);
-    gain.connect(audioContext.destination);
+  src.connect(pre).connect(post).connect(out).connect(window.__fxBus!);
 
-    const now = audioContext.currentTime;
+  // envío a reverb muy leve
+  const send = ctx.createGain();
+  send.gain.value = 0.09; // aún más sutil que el mix global
+  post.connect(send).connect(window.__reverb!);
 
-    const set = (osc: OscillatorNode, f: number, t = 0) =>
-      osc.frequency.setValueAtTime(f, now + t);
+  return out;
+}
 
-    const vol = (v: number, t = 0) =>
-      gain.gain.setValueAtTime(v, now + t);
+/* ===================== Diseño de cada sonido ===================== */
 
-    const ramp = (v: number, t: number) =>
-      gain.gain.exponentialRampToValueAtTime(Math.max(0.0001, v), now + t); // evitar 0 exacto
-
-    // waveforms distintas para más “presencia”
-    // (percepción ↑ aún si la ganancia es igual)
-    osc1.type = "sine";
-    osc2.type = "square";
-
-    switch (type) {
-      case "matrix":
-        set(osc1, 400); set(osc2, 400);
-        vol(finalVol);
-        osc1.frequency.exponentialRampToValueAtTime(200, now + 0.2);
-        osc2.frequency.exponentialRampToValueAtTime(200, now + 0.2);
-        ramp(0.005, 0.2);
-        break;
-
-      case "hacker":
-        set(osc1, 600); set(osc2, 600);
-        vol(finalVol);
-        ramp(0.005, 0.08);
-        break;
-
-      case "retro":
-        osc1.type = "triangle"; osc2.type = "triangle";
-        set(osc1, 330); set(osc2, 330);
-        set(osc1, 440, 0.05); set(osc2, 440, 0.05);
-        vol(finalVol);
-        ramp(0.005, 0.15);
-        break;
-
-      case "cyberpunk":
-        osc1.type = "triangle"; osc2.type = "triangle";
-        set(osc1, 250); set(osc2, 250);
-        set(osc1, 350, 0.03); set(osc2, 350, 0.03);
-        vol(finalVol);
-        ramp(0.005, 0.1);
-        break;
-
-      case "ocean":
-        set(osc1, 200); set(osc2, 200);
-        set(osc1, 250, 0.1); set(osc2, 250, 0.1);
-        vol(finalVol);
-        ramp(0.005, 0.3);
-        break;
-
-      case "fire":
-        osc1.type = "triangle"; osc2.type = "triangle";
-        set(osc1, 300); set(osc2, 300);
-        osc1.frequency.exponentialRampToValueAtTime(150, now + 0.1);
-        osc2.frequency.exponentialRampToValueAtTime(150, now + 0.1);
-        vol(finalVol);
-        ramp(0.005, 0.15);
-        break;
-
-      case "rainbow":
-        set(osc1, 440); set(osc2, 440);
-        set(osc1, 523, 0.05); set(osc2, 523, 0.05);
-        vol(finalVol);
-        ramp(0.005, 0.2);
-        break;
-
-      case "developer":
-        set(osc1, 500); set(osc2, 500);
-        vol(finalVol);
-        ramp(0.005, 0.1);
-        break;
-
-      case "success":
-        set(osc1, 523); set(osc2, 523);
-        set(osc1, 659, 0.05); set(osc2, 659, 0.05);
-        vol(finalVol);
-        ramp(0.005, 0.2);
-        break;
-
-      case "click":
-        set(osc1, 800); set(osc2, 800);
-        vol(finalVol);
-        ramp(0.005, 0.03);
-        break;
-
-      case "coffee":
-        set(osc1, 150); set(osc2, 150);
-        set(osc1, 200, 0.05); set(osc2, 200, 0.05);
-        vol(finalVol);
-        ramp(0.005, 0.15);
-        break;
-
-      case "game":
-      default:
-        set(osc1, 440); set(osc2, 440);
-        set(osc1, 880, 0.08); set(osc2, 880, 0.08);
-        vol(finalVol);
-        ramp(0.005, 0.25);
-        break;
-    }
-
-    osc1.start(); osc2.start();
-    osc1.stop(now + duration);
-    osc2.stop(now + duration);
-
-    const cleanup = () => {
-      if (typeof audioContext.close === "function") {
-        audioContext.close().catch(() => {});
-      }
-    };
-    osc2.onended = cleanup; // cuando termina el segundo, cerramos
-  } catch {
-    // silenciar errores (p.ej. sin user gesture)
-  }
+// Mezcla base por tipo (relativa, después del master)
+const MIX: Record<SoundType, number> = {
+  matrix: 0.9, hacker: 0.9, retro: 0.9, cyberpunk: 0.95, ocean: 0.85,
+  fire: 0.85, rainbow: 0.95, developer: 0.9, success: 1, click: 0.8, coffee: 0.9, game: 1,
 };
+
+export function playSound(type: SoundType, opts: PlayOptions = {}) {
+  const ctx = ensureCtx();
+  if (!ctx) return;
+
+  const dur = Math.max(0.08, opts.duration ?? defaultDur(type));
+  const mixVol = (MIX[type] ?? 1) * (opts.volume ?? 1);
+
+  const cleanups: Array<() => void> = [];
+  const starters: AudioScheduledSourceNode[] = [];
+  const stoppers: AudioScheduledSourceNode[] = [];
+
+  const startStop = (src: AudioScheduledSourceNode) => {
+    starters.push(src); stoppers.push(src);
+  };
+
+  // Helpers
+  const startAll = () => { const t = time(ctx); starters.forEach(s => s.start(t)); };
+  const stopAll  = () => { const t = time(ctx) + dur; stoppers.forEach(s => s.stop(t)); };
+
+  switch (type) {
+    case "matrix": {
+      // Pluck limpio descendente
+      const { a, b } = dualOsc(ctx, "sine", 2.5);
+      a.frequency.value = 420; b.frequency.value = 420;
+      a.frequency.linearRampToValueAtTime(260, time(ctx) + dur * 0.35);
+      b.frequency.linearRampToValueAtTime(260, time(ctx) + dur * 0.35);
+
+      const g = ctx.createGain();
+      a.connect(g); b.connect(g);
+
+      adsr(g, ctx, dur, 0.01, 0.08, 0.55, 0.12, 0.9);
+      routeThroughFX(ctx, g, mixVol);
+      [a, b].forEach(o => startStop(o));
+      startAll(); stopAll();
+      break;
+    }
+    case "hacker": {
+      // Ping claro con vibrato leve
+      const { a, b } = dualOsc(ctx, "triangle", 2);
+      a.frequency.value = 540; b.frequency.value = 540;
+      cleanups.push(vibrato(ctx, a.frequency, 6, 3));
+      const g = ctx.createGain();
+      a.connect(g); b.connect(g);
+      adsr(g, ctx, dur, 0.012, 0.07, 0.6, 0.1, 0.85);
+      routeThroughFX(ctx, g, mixVol);
+      [a, b].forEach(o => startStop(o));
+      startAll(); stopAll();
+      break;
+    }
+    case "retro": {
+      // “retro suave” (sine + saw muy filtrada)
+      const sine = ctx.createOscillator(); sine.type = "sine"; sine.frequency.value = 330;
+      const saw  = ctx.createOscillator(); saw.type  = "sawtooth"; saw.frequency.value  = 330;
+
+      const sMix = ctx.createGain(); sMix.gain.value = 0.35;
+      const g = ctx.createGain();
+      sine.connect(g);
+      saw.connect(sMix).connect(g);
+
+      adsr(g, ctx, dur, 0.015, 0.09, 0.6, 0.12, 0.9);
+      routeThroughFX(ctx, g, mixVol);
+      [sine, saw].forEach(o => startStop(o));
+      startAll(); stopAll();
+      break;
+    }
+    case "cyberpunk": {
+      // Whoosh corto ascendente y limpio
+      const noise = makeNoise(ctx);
+      const bp = ctx.createBiquadFilter();
+      bp.type = "bandpass";
+      bp.frequency.value = 600;
+      bp.Q.value = 0.8;
+      noise.connect(bp);
+
+      // barrido
+      bp.frequency.linearRampToValueAtTime(1400, time(ctx) + dur * 0.35);
+
+      const g = ctx.createGain();
+      bp.connect(g);
+      adsr(g, ctx, dur, 0.005, 0.06, 0.5, 0.08, 0.9);
+      routeThroughFX(ctx, g, mixVol);
+      startStop(noise);
+      startAll(); stopAll();
+      break;
+    }
+    case "ocean": {
+      // Ola corta: ruido filtrado + seno grave
+      const base = ctx.createOscillator(); base.type = "sine"; base.frequency.value = 170;
+      const noise = makeNoise(ctx);
+      const lpw = ctx.createBiquadFilter(); lpw.type = "lowpass"; lpw.frequency.value = 900; lpw.Q.value = 0.4;
+      noise.connect(lpw);
+
+      const g = ctx.createGain();
+      base.connect(g); lpw.connect(g);
+      adsr(g, ctx, dur, 0.02, 0.12, 0.7, 0.18, 0.8);
+      routeThroughFX(ctx, g, mixVol);
+      [base, noise].forEach(o => startStop(o));
+      startAll(); stopAll();
+      break;
+    }
+    case "fire": {
+      // Brasa: pequeño soplido cálido
+      const tone = ctx.createOscillator(); tone.type = "sine"; tone.frequency.value = 240;
+      const n = makeNoise(ctx);
+      const bp = ctx.createBiquadFilter(); bp.type = "bandpass"; bp.frequency.value = 1200; bp.Q.value = 0.7;
+      n.connect(bp);
+
+      const g = ctx.createGain();
+      tone.connect(g); bp.connect(g);
+      adsr(g, ctx, dur, 0.008, 0.06, 0.55, 0.12, 0.85);
+      routeThroughFX(ctx, g, mixVol);
+      [tone, n].forEach(o => startStop(o));
+      startAll(); stopAll();
+      break;
+    }
+    case "rainbow": {
+      // Arpegio limpio 2-3 notas
+      const o = ctx.createOscillator(); o.type = "sine";
+      const f = o.frequency;
+      f.setValueAtTime(440, time(ctx));
+      f.linearRampToValueAtTime(523.25, time(ctx) + dur * 0.34);
+      f.linearRampToValueAtTime(659.25, time(ctx) + dur * 0.68);
+
+      const g = ctx.createGain();
+      o.connect(g);
+      adsr(g, ctx, dur, 0.01, 0.07, 0.62, 0.1, 0.95);
+      routeThroughFX(ctx, g, mixVol);
+      startStop(o);
+      startAll(); stopAll();
+      break;
+    }
+    case "developer": {
+      // Ping elegante medio-agudo
+      const { a, b } = dualOsc(ctx, "sine", 2);
+      a.frequency.value = 520; b.frequency.value = 520;
+      const g = ctx.createGain(); a.connect(g); b.connect(g);
+      adsr(g, ctx, dur, 0.01, 0.06, 0.6, 0.1, 0.9);
+      routeThroughFX(ctx, g, mixVol);
+      [a, b].forEach(o => startStop(o));
+      startAll(); stopAll();
+      break;
+    }
+    case "success": {
+      // Ding moderno con pitch-up corto
+      const o = ctx.createOscillator(); o.type = "sine";
+      o.frequency.value = 520;
+      o.frequency.linearRampToValueAtTime(780, time(ctx) + dur * 0.25);
+      const g = ctx.createGain(); o.connect(g);
+      adsr(g, ctx, dur, 0.006, 0.05, 0.55, 0.09, 1);
+      routeThroughFX(ctx, g, mixVol);
+      startStop(o);
+      startAll(); stopAll();
+      break;
+    }
+    case "click": {
+      // Blip UI discreto (casi sin reverb)
+      const o = ctx.createOscillator(); o.type = "sine"; o.frequency.value = 850;
+      const g = ctx.createGain(); o.connect(g);
+      adsr(g, ctx, Math.min(0.12, dur), 0.004, 0.02, 0.25, 0.04, 0.9);
+
+      const pre = hp(ctx, 200);
+      o.connect(pre);
+      const out = ctx.createGain(); out.gain.value = mixVol;
+      pre.connect(out).connect(window.__fxBus!);
+
+      startStop(o);
+      startAll(); stopAll();
+      break;
+    }
+    case "coffee":
+    case "game":
+    default: {
+      // Toast agradable con 2 notas suaves
+      const o = ctx.createOscillator(); o.type = "sine";
+      const f = o.frequency;
+      f.setValueAtTime(440, time(ctx));
+      f.linearRampToValueAtTime(660, time(ctx) + dur * 0.4);
+      const g = ctx.createGain(); o.connect(g);
+      adsr(g, ctx, dur, 0.01, 0.06, 0.6, 0.12, 0.95);
+      routeThroughFX(ctx, g, mixVol);
+      startStop(o);
+      startAll(); stopAll();
+      break;
+    }
+  }
+
+  // Limpieza de LFOs si los hubiera
+  setTimeout(() => cleanups.forEach(fn => { try { fn(); } catch {} }), (dur + 0.05) * 1000);
+}
+
+function defaultDur(t: SoundType) {
+  switch (t) {
+    case "click": return 0.09;
+    case "success": return 0.22;
+    case "cyberpunk": return 0.18;
+    case "matrix": return 0.22;
+    case "hacker": return 0.18;
+    case "retro": return 0.2;
+    case "ocean": return 0.28;
+    case "fire": return 0.2;
+    case "rainbow": return 0.26;
+    case "developer": return 0.18;
+    case "coffee": return 0.24;
+    case "game": return 0.24;
+    default: return 0.22;
+  }
+}
+
+/* Opcional: llamalo tras primer gesto del usuario (iOS desbloqueo). */
+export function unlockAudio() {
+  const ctx = ensureCtx();
+  if (!ctx) return;
+  // crear un silencio para “desmutear” iOS/Safari
+  const g = ctx.createGain(); g.gain.value = 0;
+  const o = ctx.createOscillator();
+  o.connect(g).connect(window.__fxBus!);
+  o.start(); o.stop(time(ctx) + 0.01);
+}

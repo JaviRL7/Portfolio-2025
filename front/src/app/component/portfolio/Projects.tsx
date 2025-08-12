@@ -31,19 +31,25 @@ export default function Projects({ theme, isHacker, projects }: Props) {
         </motion.h2>
 
         <div className="grid md:grid-cols-2 lg:grid-cols-3 gap-8 items-stretch">
-  {projects.map((p, index) => {
-    const title = p.title?.[language] ?? p.title?.en ?? p.title?.es ?? "";
-    const description = p.description?.[language] ?? p.description?.en ?? p.description?.es ?? "";
+{projects.map((p, index) => {
+  const title = p.title?.[language] ?? p.title?.en ?? p.title?.es ?? "";
+  const description = p.description?.[language] ?? p.description?.en ?? p.description?.es ?? "";
 
-    return (
-      <motion.div
-        key={`${title}-${index}`}
-        initial={{ opacity: 0, y: 50 }}
-        whileInView={{ opacity: 1, y: 0 }}
-        transition={{ duration: 0.8, delay: index * 0.2 }}
-        viewport={{ once: true }}
-        whileHover={{ scale: 1.05 }}
-        className="group h-full"
+  return (
+    <motion.div
+      key={`${title}-${index}`}
+      initial={{ opacity: 0, y: 50 }}
+      whileInView={{ opacity: 1, y: 0 }}
+      transition={{ duration: 0.8, delay: index * 0.2 }}
+      viewport={{ once: true }}
+      whileHover={{ scale: 1.05 }}
+      className="group h-full"
+    >
+      <a
+        href={p.link}
+        target="_blank"
+        rel="noopener noreferrer"
+        className="block h-full"
       >
         <Card
           className={`overflow-hidden transition-all duration-300 bg-gray-900/50 backdrop-blur-sm border ${theme.border} flex flex-col h-full`}
@@ -75,9 +81,10 @@ export default function Projects({ theme, isHacker, projects }: Props) {
             </div>
           </CardContent>
         </Card>
-      </motion.div>
-    );
-  })}
+      </a>
+    </motion.div>
+  );
+})}
 </div>
       </div>
     </section>
