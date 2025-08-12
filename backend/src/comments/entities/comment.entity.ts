@@ -1,7 +1,7 @@
 export class Comment {
-  id: string;
-  name: string;
+  id!: string;
+  name!: string;
   role?: string;
-  texto: string;
-  createdAt: string; // ISO date
+  texto!: string;
+  createdAt!: string; // o Date si preferís: createdAt!: Date;
 }
