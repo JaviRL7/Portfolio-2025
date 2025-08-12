@@ -1,6 +1,7 @@
 "use client";
 import { motion } from "framer-motion";
 import { Code, Zap, Download, Mail, Coffee, ChevronDown, Globe } from "lucide-react";
+import Link from "next/link";
 import { Button } from "@/components/ui/button";
 import { useLanguage } from "@/context/useLanguage";
 import LanguageSwitcher from "./LanguageSwitcher";
@@ -27,7 +28,6 @@ export default function Hero({
   setSoundEnabled,
 }: Props) {
    const { language } = useLanguage();
-
 
   return (
     <section className="relative min-h-screen flex items-center justify-center px-4">
@@ -87,6 +87,12 @@ export default function Hero({
         >
           {/* Descargar CV */}
           <Button
+            onClick={() => {
+    const link = document.createElement("a");
+          link.href = "/Joaquin_Martinez.CV.pdf";
+          link.download = "Joaquin_Martinez.CV.pdf";
+          link.click();
+        }}
             className={`px-8 py-3 rounded-full transition-all duration-300 hover:scale-105 hover:shadow-lg text-white bg-gradient-to-r ${theme.secondary} hover:shadow-current/50`}
           >
             <Download className="w-4 h-4 mr-2" />
@@ -100,19 +106,22 @@ export default function Hero({
           </Button>
 
           {/* Contacto */}
-          <Button
-            variant="outline"
-            className={`px-8 py-3 rounded-full transition-all duration-300 hover:scale-105 bg-transparent ${theme.border} ${theme.accent} hover:bg-white hover:text-black hover:shadow-lg`}
-          >
-            <Mail className="w-4 h-4 mr-2" />
-            {isHacker
-              ? language === "es"
-                ? "Enviar_Mensaje()"
-                : "Send_Message()"
-              : language === "es"
-              ? "Contáctame"
-              : "Contact Me"}
-          </Button>
+         <Button
+  onClick={() => {
+    document.getElementById("contacto")?.scrollIntoView({ behavior: "smooth" });
+  }}
+  variant="outline"
+  className={`px-8 py-3 rounded-full transition-all duration-300 hover:scale-105 bg-transparent ${theme.border} ${theme.accent} hover:bg-white hover:text-black hover:shadow-lg`}
+>
+  <Mail className="w-4 h-4 mr-2" />
+  {isHacker
+    ? language === "es"
+      ? "Enviar_Mensaje()"
+      : "Send_Message()"
+    : language === "es"
+    ? "Contáctame"
+    : "Contact Me"}
+</Button>
 
           {/* Café */}
           <motion.button

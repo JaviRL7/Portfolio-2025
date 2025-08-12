@@ -52,7 +52,7 @@ export default function Contact({ theme, isHacker }: Props) {
   ];
 
   return (
-    <section className="py-20 px-4 relative z-10">
+    <section id="contacto" className="py-20 px-4 relative z-10">
       <div className="max-w-4xl mx-auto text-center">
         <motion.h2
           className={`text-4xl md:text-6xl font-bold mb-8 bg-clip-text text-transparent bg-gradient-to-r ${theme.primary}`}
