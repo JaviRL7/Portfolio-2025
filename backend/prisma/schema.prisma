@@ -1,0 +1,16 @@
+datasource db {
+  provider = "postgresql" // o "sqlite"
+  url      = env("DATABASE_URL")
+}
+
+generator client {
+  provider = "prisma-client-js"
+}
+
+model Comment {
+  id        String   @id @default(uuid())
+  name      String
+  role      String?
+  texto     String
+  createdAt DateTime @default(now())
+}
