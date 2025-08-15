@@ -89,8 +89,8 @@ export default function Hero({
           <Button
             onClick={() => {
     const link = document.createElement("a");
-          link.href = "/Joaquin_Martinez.CV.pdf";
-          link.download = "Joaquin_Martinez.CV.pdf";
+          link.href = "/JoaquinMartinez.CV.pdf";
+          link.download = "JoaquinMartinez.CV.pdf";
           link.click();
         }}
             className={`px-8 py-3 rounded-full transition-all duration-300 hover:scale-105 hover:shadow-lg text-white bg-gradient-to-r ${theme.secondary} hover:shadow-current/50`}
