@@ -1,9 +1,9 @@
 /* eslint-disable @typescript-eslint/no-unsafe-member-access */
 /* eslint-disable @typescript-eslint/no-unsafe-call */
 /* eslint-disable @typescript-eslint/no-unsafe-assignment */
-import { Injectable, Logger } from '@nestjs/common';
-import nodemailer, { Transporter, SendMailOptions } from 'nodemailer';
-import SMTPTransport from 'nodemailer/lib/smtp-transport';
+import { Injectable, Logger } from "@nestjs/common";
+import nodemailer, { Transporter, SendMailOptions } from "nodemailer";
+import SMTPTransport from "nodemailer/lib/smtp-transport";
 
 @Injectable()
 export class MailerService {
@@ -12,12 +12,12 @@ export class MailerService {
 
   constructor() {
     const options: SMTPTransport.Options = {
-      host: process.env.SMTP_HOST ?? 'smtp.gmail.com',
+      host: process.env.SMTP_HOST ?? "smtp.gmail.com",
       port: Number(process.env.SMTP_PORT ?? 587),
       secure: Number(process.env.SMTP_PORT ?? 587) === 465,
       auth: {
-        user: process.env.SMTP_USER ?? '',
-        pass: process.env.SMTP_PASS ?? '',
+        user: process.env.SMTP_USER ?? "",
+        pass: process.env.SMTP_PASS ?? "",
       },
     };
     this.transporter = nodemailer.createTransport(options);
@@ -38,7 +38,7 @@ export class MailerService {
     const mail: SendMailOptions = {
       from:
         process.env.MAIL_FROM ??
-        `Portfolio Notifier <${process.env.SMTP_USER ?? 'no-reply@local'}>`,
+        `Portfolio Notifier <${process.env.SMTP_USER ?? "no-reply@local"}>`,
       to,
       subject,
       html,
@@ -55,16 +55,16 @@ export class MailerService {
   ): Promise<void> {
     const html = `
       <h2>Nuevo comentario recibido</h2>
-      <p><strong>Nombre:</strong> ${name || '—'}</p>
-      <p><strong>Rol:</strong> ${role || '—'}</p>
+      <p><strong>Nombre:</strong> ${name || "—"}</p>
+      <p><strong>Rol:</strong> ${role || "—"}</p>
       <p><strong>Mensaje:</strong></p>
-      <blockquote>${message || '—'}</blockquote>
+      <blockquote>${message || "—"}</blockquote>
     `;
     await this.send(
-      'joaco.martinez1480@gmail.com',
-      'Nuevo comentario en tu portfolio',
+      "joaco.martinez1480@gmail.com",
+      "Nuevo comentario en tu portfolio",
       html,
     );
-    this.logger.log('📧 Email de comentario enviado');
+    this.logger.log("📧 Email de comentario enviado");
   }
 }

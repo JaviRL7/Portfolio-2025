@@ -1,9 +1,9 @@
 // comments.service.ts
-import { Injectable } from '@nestjs/common';
-import { randomUUID } from 'crypto';
-import { CreateCommentDto } from './entities/dto/create-comment.dto';
-import { Comment } from './entities/comment.entity';
-import { MailerService } from '../mailer/mailer.service';
+import { Injectable } from "@nestjs/common";
+import { randomUUID } from "crypto";
+import { CreateCommentDto } from "./entities/dto/create-comment.dto";
+import { Comment } from "./entities/comment.entity";
+import { MailerService } from "../mailer/mailer.service";
 
 @Injectable()
 export class CommentsService {
@@ -29,21 +29,21 @@ export class CommentsService {
         (ch) =>
           (
             ({
-              '&': '&amp;',
-              '<': '&lt;',
-              '>': '&gt;',
-              '"': '&quot;',
-              "'": '&#39;',
+              "&": "&amp;",
+              "<": "&lt;",
+              ">": "&gt;",
+              '"': "&quot;",
+              "'": "&#39;",
             }) as const
           )[ch]!,
       );
 
-    const fecha = new Date(comment.createdAt).toLocaleString('es-AR');
+    const fecha = new Date(comment.createdAt).toLocaleString("es-AR");
 
     const html = `
       <div style="font-family:system-ui,Arial,sans-serif;max-width:600px;margin:auto">
         <h2>Nuevo comentario en tu portfolio</h2>
-        <p><strong>Nombre:</strong> ${escapeHtml(comment.name)}${comment.role ? ` — <em>${escapeHtml(comment.role)}</em>` : ''}</p>
+        <p><strong>Nombre:</strong> ${escapeHtml(comment.name)}${comment.role ? ` — <em>${escapeHtml(comment.role)}</em>` : ""}</p>
         <p><strong>Fecha:</strong> ${escapeHtml(fecha)}</p>
         <p><strong>Mensaje:</strong></p>
         <blockquote style="border-left:4px solid #8b5cf6;padding:8px 12px;background:#f8f5ff">
@@ -54,7 +54,7 @@ export class CommentsService {
     `;
 
     const text = `Nuevo comentario
-Nombre: ${comment.name}${comment.role ? ` (${comment.role})` : ''}
+Nombre: ${comment.name}${comment.role ? ` (${comment.role})` : ""}
 Fecha: ${fecha}
 Mensaje: ${comment.texto}
 ID: ${comment.id}`;
@@ -62,17 +62,17 @@ ID: ${comment.id}`;
     // Resolver string | undefined y catch tipado (unknown -> narrow a Error)
     const owner = process.env.OWNER_EMAIL;
     if (!owner) {
-      console.warn('OWNER_EMAIL no está definido; no se envía email.');
+      console.warn("OWNER_EMAIL no está definido; no se envía email.");
       return comment;
     }
 
     this.mailer
-      .send(owner, 'Nuevo comentario en tu portfolio', html, text)
+      .send(owner, "Nuevo comentario en tu portfolio", html, text)
       .catch((err: unknown) => {
         if (err instanceof Error) {
-          console.error('Error enviando mail:', err.message);
+          console.error("❌ Error enviando mail:", err.message);
         } else {
-          console.error('Error desconocido enviando mail:', err);
+          console.error("❌ Error desconocido enviando mail:", err);
         }
       });
 

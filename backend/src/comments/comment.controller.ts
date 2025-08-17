@@ -1,9 +1,9 @@
-import { Body, Controller, Get, Post } from '@nestjs/common';
-import { CreateCommentDto } from './entities/dto/create-comment.dto';
-import { CommentsService } from './comment.service';
-import { Comment } from './entities/comment.entity';
+import { Body, Controller, Get, Post } from "@nestjs/common";
+import { CreateCommentDto } from "./entities/dto/create-comment.dto";
+import { CommentsService } from "./comment.service";
+import { Comment } from "./entities/comment.entity";
 
-@Controller('comments')
+@Controller("comments")
 export class CommentsController {
   constructor(private readonly commentsService: CommentsService) {}
 
