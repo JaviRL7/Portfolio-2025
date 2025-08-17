@@ -17,6 +17,6 @@ import { MailerModule } from "./mailer/mailer.module";
     CommentsModule,
   ],
   controllers: [AppController],
-  providers: [AppService],
+  providers: [AppService, PrismaService],
 })
 export class AppModule {}
