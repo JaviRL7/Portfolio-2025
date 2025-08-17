@@ -10,6 +10,7 @@ async function bootstrap() {
   const ALLOWED = new Set([
     "https://www.joacodev.com.ar",
     "https://joacodev.com.ar",
+    "https://portfolio-production-44d8.up.railway.app",
   ]);
 
   app.enableCors({
