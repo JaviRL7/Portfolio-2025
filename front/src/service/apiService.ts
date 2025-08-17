@@ -4,7 +4,7 @@ import axios, { AxiosError, AxiosRequestConfig } from 'axios';
 import toast from 'react-hot-toast';
 
 const axiosRes = axios.create({
-  baseURL: process.env.NEXT_PUBLIC_API_URL || '/api',
+  baseURL: process.env.NEXT_PUBLIC_API_URL || 'portfolio-production-c47b.up.railway.app',
 });
 
 // ---- Tipos del dominio ----

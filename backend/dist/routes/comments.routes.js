@@ -1,0 +1,12 @@
+"use strict";
+Object.defineProperty(exports, "__esModule", { value: true });
+const express_1 = require("express");
+const comments_controller_1 = require("../controller/comments.controller");
+const comments_service_1 = require("../services/comments.service");
+const validate_1 = require("../middleware/validate");
+const comments_schema_1 = require("../schema/comments.schema");
+const router = (0, express_1.Router)();
+const controller = new comments_controller_1.CommentsController(new comments_service_1.CommentsService());
+router.get("/", controller.list);
+router.post("/", (0, validate_1.validate)(comments_schema_1.createCommentSchema), controller.create);
+exports.default = router;
