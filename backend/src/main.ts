@@ -7,21 +7,8 @@ async function bootstrap() {
   // Si usás cookies cross-site, detrás de proxy:
   // app.set('trust proxy', 1);
 
-  const ALLOWED = new Set([
-    "https://www.joacodev.com.ar",
-    "https://joacodev.com.ar",
-    "https://portfolio-production-44d8.up.railway.app",
-  ]);
-
   app.enableCors({
-    origin: (
-      origin: string | undefined,
-      cb: (err: Error | null, allow?: boolean) => void,
-    ) => {
-      // permite healthchecks / curl (sin origin)
-      if (!origin) return cb(null, true);
-      cb(null, ALLOWED.has(origin));
-    },
+    origin: "*",
     credentials: true,
     methods: ["GET", "POST", "PUT", "PATCH", "DELETE", "OPTIONS"],
     allowedHeaders: ["Content-Type", "Authorization", "X-Requested-With"],
