@@ -3,8 +3,21 @@
 import axios, { AxiosError, AxiosRequestConfig } from 'axios';
 import toast from 'react-hot-toast';
 
+/** Normaliza la base URL: agrega https:// si falta y quita la barra final */
+function normalizeBaseUrl(raw?: string) {
+  let u = (raw ?? '').trim();
+  if (!u) return 'https://portfolio-production-c47b.up.railway.app';
+  if (!/^https?:\/\//i.test(u)) u = `https://${u}`;
+  return u.replace(/\/+$/, '');
+}
+
+const BASE_URL = normalizeBaseUrl(process.env.NEXT_PUBLIC_API_URL);
+
 const axiosRes = axios.create({
-  baseURL: process.env.NEXT_PUBLIC_API_URL || 'portfolio-production-c47b.up.railway.app',
+  baseURL: BASE_URL,
+  timeout: 15000,
+  headers: { 'Content-Type': 'application/json' },
+  // withCredentials: true, // ← activalo si usás cookies/sesiones
 });
 
 // ---- Tipos del dominio ----
@@ -30,10 +43,12 @@ function unwrap<T = any>(data: any): T {
 // ---- Manejo de errores estándar ----
 function handleError(error: unknown, showFail: boolean) {
   const err = error as AxiosError<any>;
-  const msg =
-    err.response?.data?.message ||
-    err.message ||
-    'Ocurrió un error. Intentalo de nuevo.';
+  let msg = 'Ocurrió un error. Intentalo de nuevo.';
+
+  if (err.response?.data?.message) msg = String(err.response.data.message);
+  else if (err.message) msg = err.message;
+  else if ((err as any)?.code === 'ERR_NETWORK') msg = 'No se pudo conectar con el servidor.';
+
   if (showFail) toast.error(msg, { duration: 2000 });
   throw err;
 }
@@ -41,8 +56,9 @@ function handleError(error: unknown, showFail: boolean) {
 // ---- Métodos base ----
 async function get<T = any>(
   url: string,
-  { showSuccess = false, showFail = true, config }: { showSuccess?: boolean; showFail?: boolean; config?: AxiosRequestConfig } = {},
+  opts: { showSuccess?: boolean; showFail?: boolean; config?: AxiosRequestConfig } = {},
 ): Promise<T> {
+  const { showSuccess = false, showFail = true, config } = opts;
   try {
     const res = await axiosRes.get(url, config);
     if (showSuccess && res.data?.message) toast.success(res.data.message, { duration: 2000 });
@@ -56,8 +72,9 @@ async function get<T = any>(
 async function post<T = any>(
   url: string,
   data?: unknown,
-  { showSuccess = false, showFail = true, config }: { showSuccess?: boolean; showFail?: boolean; config?: AxiosRequestConfig } = {},
+  opts: { showSuccess?: boolean; showFail?: boolean; config?: AxiosRequestConfig } = {},
 ): Promise<T> {
+  const { showSuccess = false, showFail = true, config } = opts;
   try {
     const res = await axiosRes.post(url, data, config);
     if (showSuccess && res.data?.message) toast.success(res.data.message, { duration: 2000 });
@@ -65,15 +82,15 @@ async function post<T = any>(
   } catch (e) {
     handleError(e, showFail);
     return Promise.reject(e);
-
   }
 }
 
 async function put<T = any>(
   url: string,
   data?: unknown,
-  { showSuccess = false, showFail = true, config }: { showSuccess?: boolean; showFail?: boolean; config?: AxiosRequestConfig } = {},
+  opts: { showSuccess?: boolean; showFail?: boolean; config?: AxiosRequestConfig } = {},
 ): Promise<T> {
+  const { showSuccess = false, showFail = true, config } = opts;
   try {
     const res = await axiosRes.put(url, data, config);
     if (showSuccess && res.data?.message) toast.success(res.data.message, { duration: 2000 });
@@ -81,15 +98,15 @@ async function put<T = any>(
   } catch (e) {
     handleError(e, showFail);
     return Promise.reject(e);
-
   }
 }
 
 async function patch<T = any>(
   url: string,
   data?: unknown,
-  { showSuccess = false, showFail = true, config }: { showSuccess?: boolean; showFail?: boolean; config?: AxiosRequestConfig } = {},
+  opts: { showSuccess?: boolean; showFail?: boolean; config?: AxiosRequestConfig } = {},
 ): Promise<T> {
+  const { showSuccess = false, showFail = true, config } = opts;
   try {
     const res = await axiosRes.patch(url, data, config);
     if (showSuccess && res.data?.message) toast.success(res.data.message, { duration: 2000 });
@@ -97,14 +114,14 @@ async function patch<T = any>(
   } catch (e) {
     handleError(e, showFail);
     return Promise.reject(e);
-
   }
 }
 
 async function del<T = any>(
   url: string,
-  { showSuccess = false, showFail = true, config }: { showSuccess?: boolean; showFail?: boolean; config?: AxiosRequestConfig } = {},
+  opts: { showSuccess?: boolean; showFail?: boolean; config?: AxiosRequestConfig } = {},
 ): Promise<T> {
+  const { showSuccess = false, showFail = true, config } = opts;
   try {
     const res = await axiosRes.delete(url, config);
     if (showSuccess && res.data?.message) toast.success(res.data.message, { duration: 2000 });
@@ -112,15 +129,12 @@ async function del<T = any>(
   } catch (e) {
     handleError(e, showFail);
     return Promise.reject(e);
-
   }
 }
 
-
+// ---- API de comentarios ----
 export const commentsApi = {
-  create: (payload: CreateCommentDto) =>
-    post<Comment>('/comments', payload, { showSuccess: true }),
-
+  create: (payload: CreateCommentDto) => post<Comment>('/comments', payload, { showSuccess: true }),
   list: () => get<Comment[]>('/comments'),
 };
 
