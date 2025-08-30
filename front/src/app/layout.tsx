@@ -26,7 +26,7 @@ export const metadata: Metadata = {
       "Desarrollador especializado en backend, bases de datos y automatización con IA.",
     images: [
       {
-        url: "/Captura de pantalla 2025-08-12 012551.png", // 1200x630 recomendado
+        url: "/FotoJavi.jpeg",
         width: 1200,
         height: 630,
         alt: "Portfolio de Javier Rodriguez",
