@@ -7,7 +7,7 @@ import { LanguageProvider } from "@/context/useLanguage";
 const inter = Inter({ subsets: ["latin"], display: "swap" });
 
 export const metadata: Metadata = {
-  metadataBase: new URL("https://www.joacodev.com.ar"),
+  metadataBase: new URL("https://profound-inspiration-production.up.railway.app"),
   title: {
     default: "Javier Rodriguez - Full Stack Developer",
     template: "%s | Javier Rodriguez",
