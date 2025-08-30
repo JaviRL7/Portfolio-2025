@@ -1,6 +1,6 @@
 "use client";
 import { motion } from "framer-motion";
-import { Code, Zap, Download, Mail, Coffee, ChevronDown, Globe } from "lucide-react";
+import { Download, Mail, ChevronDown } from "lucide-react";
 import Link from "next/link";
 import { Button } from "@/components/ui/button";
 import { useLanguage } from "@/context/useLanguage";
@@ -41,7 +41,7 @@ export default function Hero({
         <AvatarHero
   onAvatarClick={onAvatarClick}
   clickCount={clickCount}
-  avatarSrc="/image.png" // o tu URL de Cloudinary
+  avatarSrc="/FotoJavi2.jpeg"
 />
 
         {/* Título */}
@@ -58,25 +58,31 @@ export default function Hero({
     transition={{ duration: 6, repeat: Infinity, ease: "linear" }}
     style={{ backgroundSize: "200% 100%" }}       // “tela” para mover
   >
-    {isHacker ? "H4CK3R_M0D3" : "JOAQUIN MARTINEZ"}
+    {isHacker ? "H4CK3R_M0D3" : "JAVIER RODRÍGUEZ"}
   </motion.span>
 </motion.h1>
 
-        {/* Subtítulo */}
-        <motion.p
-          className="text-xl md:text-2xl mb-8 text-gray-300"
+        {/* Descripción profesional */}
+        <motion.div
+          className="mb-8 text-center max-w-4xl mx-auto"
           initial={{ opacity: 0 }}
           animate={{ opacity: 1 }}
           transition={{ delay: 0.5 }}
         >
-          {isHacker
-            ? language === "es"
-              ? "System.exe • Root Access • Matrix.dll"
-              : "System.exe • Root Access • Matrix.dll"
-            : language === "es"
-            ? "Desarrollador Full Stack • Especialista en Frontend • Creador de experiencias web atractivas"
-            : "Full Stack Developer • Frontend Specialist • Creator of engaging web experiences"}
-        </motion.p>
+          {/* Frase principal */}
+          <p className="text-2xl md:text-3xl font-semibold text-gray-200 mb-4">
+            {language === "es"
+              ? "Full Stack Developer con especialidad en Backend • Creando soluciones eficientes y experiencias atractivas"
+              : "Full Stack Developer with Backend specialization • Creating efficient solutions and attractive experiences"}
+          </p>
+          
+          {/* Frase complementaria */}
+          <p className="text-lg md:text-xl text-gray-400">
+            {language === "es"
+              ? "Experiencia en Python, PHP, JavaScript y React. Proyectos personales en Machine Learning, procesamiento de datos y automatización con IA."
+              : "Experience in Python, PHP, JavaScript and React. Personal projects in Machine Learning, data processing and AI automation."}
+          </p>
+        </motion.div>
 
         {/* Botones */}
         <motion.div
@@ -89,11 +95,12 @@ export default function Hero({
           <Button
             onClick={() => {
     const link = document.createElement("a");
-          link.href = "/JoaquinMartinez.CV.pdf";
-          link.download = "JoaquinMartinez.CV.pdf";
+          link.href = "/CV Javier Rodriguez OP 2025.pdf";
+          link.download = "CV Javier Rodriguez OP 2025.pdf";
           link.click();
         }}
-            className={`px-8 py-3 rounded-full transition-all duration-300 hover:scale-105 hover:shadow-lg text-white bg-gradient-to-r ${theme.secondary} hover:shadow-current/50`}
+            variant="outline"
+            className={`px-8 py-3 rounded-full transition-all duration-300 bg-transparent ${theme.border} text-white hover:bg-white/20 hover:scale-110 hover:text-white`}
           >
             <Download className="w-4 h-4 mr-2" />
             {isHacker
@@ -111,7 +118,7 @@ export default function Hero({
     document.getElementById("contacto")?.scrollIntoView({ behavior: "smooth" });
   }}
   variant="outline"
-  className={`px-8 py-3 rounded-full transition-all duration-300 hover:scale-105 bg-transparent ${theme.border} ${theme.accent} hover:bg-white hover:text-black hover:shadow-lg`}
+  className={`px-8 py-3 rounded-full transition-all duration-300 bg-transparent ${theme.border} text-white hover:bg-white/20 hover:scale-110 hover:text-white`}
 >
   <Mail className="w-4 h-4 mr-2" />
   {isHacker
@@ -123,59 +130,10 @@ export default function Hero({
     : "Contact Me"}
 </Button>
 
-          {/* Café */}
-          <motion.button
-            onClick={onCoffee}
-            className="relative p-3 bg-amber-600 hover:bg-amber-700 rounded-full transition-all duration-300 hover:scale-110"
-            whileHover={{ rotate: 15 }}
-            whileTap={{ scale: 0.9 }}
-            title={language === "es" ? "¡Dame más café!" : "Give me more coffee!"}
-          >
-            <Coffee className="w-5 h-5 text-white" />
-            {coffeeCount > 0 && (
-              <span className="absolute -top-2 -right-2 bg-red-500 text-white text-xs rounded-full w-6 h-6 flex items-center justify-center">
-                {coffeeCount}
-              </span>
-            )}
-          </motion.button>
-
-          {/* Sonido */}
-          <motion.button
-            onClick={() => setSoundEnabled(!soundEnabled)}
-            className={`p-3 rounded-full transition-all duration-300 hover:scale-110 ${
-              soundEnabled ? "bg-green-600 hover:bg-green-700" : "bg-gray-600 hover:bg-gray-700"
-            }`}
-            whileHover={{ rotate: 15 }}
-            whileTap={{ scale: 0.9 }}
-            title={
-              soundEnabled
-                ? language === "es"
-                  ? "Desactivar sonidos"
-                  : "Disable sounds"
-                : language === "es"
-                ? "Activar sonidos"
-                : "Enable sounds"
-            }
-          >
-            {soundEnabled ? "🔊" : "🔇"}
-          </motion.button>
-
           {/* 🌐 Idioma */}
-            <LanguageSwitcher />
+          <LanguageSwitcher />
         </motion.div>
 
-        {/* Tips */}
-        {!isHacker && (
-          <motion.div
-            className="mt-8 text-sm text-gray-500 space-y-1"
-            initial={{ opacity: 0 }}
-            animate={{ opacity: 1 }}
-            transition={{ delay: 2 }}
-          >
-            <p>💡 Tips: M=Matrix, H=Hacker, R=Retro, C=Cyberpunk</p>
-            <p>🌊 O=Ocean, F=Fire, T=Rainbow, D=Developer</p>
-          </motion.div>
-        )}
       </motion.div>
 
       {/* Flecha abajo */}

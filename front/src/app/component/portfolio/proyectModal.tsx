@@ -197,7 +197,7 @@ export default function ProjectModal({
                 rel="noreferrer noopener"
                 className="inline-flex items-center gap-2 rounded-lg border border-white/15 bg-white/5 px-4 py-2 text-sm font-semibold text-white transition hover:bg-white/10 focus:outline-none focus:ring-2 focus:ring-white/30"
               >
-                <Github size={16} /> Ver Código
+                <Github size={16} /> Ver Proyecto
               </a>
             )}
           </div>

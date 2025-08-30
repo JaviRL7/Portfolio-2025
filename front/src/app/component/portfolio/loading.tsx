@@ -17,7 +17,7 @@ export default function LoadingScreen({
   progress,
   stepIndex,
   steps,
-  title = "<JOACO_404?/>",
+  title = "<javi_404/>",
 }: Props) {
   const loadingSteps = useMemo(
     () =>

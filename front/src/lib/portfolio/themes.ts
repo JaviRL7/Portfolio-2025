@@ -6,7 +6,7 @@ export const THEMES: Record<ThemeKey, ThemeColors> = {
     secondary: "from-cyan-400 to-indigo-500",
     accent: 	"text-gray-100", 
     border: "border-violet-400/30 hover:border-fuchsia-400/60",
-    bg: "bg-[#0b0f19]", // navy oscuro elegante
+    bg: "bg-[#0F172A]", // azul marino
     cursor: "bg-fuchsia-400",
   },
   hacker: {
@@ -30,7 +30,7 @@ export const THEMES: Record<ThemeKey, ThemeColors> = {
     secondary: "from-rose-500 to-fuchsia-600",
     accent: "text-rose-300",
     border: "border-rose-400/30 hover:border-fuchsia-400/60",
-    bg: "bg-gradient-to-br from-[#1b0a12] to-[#2a0f1f]",
+    bg: "bg-[#1b0a12]",
     cursor: "bg-rose-400",
   },
   cyberpunk: {
@@ -38,7 +38,7 @@ export const THEMES: Record<ThemeKey, ThemeColors> = {
     secondary: "from-violet-600 to-cyan-500",
     accent: "text-fuchsia-300",
     border: "border-fuchsia-500/30 hover:border-cyan-400/60",
-    bg: "bg-gradient-to-br from-[#0a0014] to-[#00121c]", 
+    bg: "bg-[#0a0014]", 
     cursor: "bg-cyan-400",
   },
   ocean: {
@@ -46,7 +46,7 @@ export const THEMES: Record<ThemeKey, ThemeColors> = {
     secondary: "from-teal-500 to-sky-600",
     accent: "text-cyan-300",
     border: "border-cyan-500/30 hover:border-teal-400/60",
-    bg: "bg-gradient-to-br from-[#061824] to-[#071a29]",
+    bg: "bg-[#061824]",
     cursor: "bg-cyan-400",
   },
   fire: {
@@ -54,7 +54,7 @@ export const THEMES: Record<ThemeKey, ThemeColors> = {
     secondary: "from-orange-600 to-rose-600",
     accent: "text-amber-300",
     border: "border-orange-500/30 hover:border-amber-400/60",
-    bg: "bg-gradient-to-br from-[#190c07] to-[#2a0f0b]",
+    bg: "bg-[#190c07]",
     cursor: "bg-amber-400",
   },
   rainbow: {
@@ -62,26 +62,11 @@ export const THEMES: Record<ThemeKey, ThemeColors> = {
     secondary: "from-violet-500 to-sky-500",
     accent: "text-violet-300",
     border: "border-violet-500/30 hover:border-sky-400/60",
-    bg: "bg-gradient-to-br from-[#0f0f1e] via-[#110c1b] to-[#0a1820]",
+    bg: "bg-[#0f0f1e]",
     cursor: "bg-violet-400",
   },
 };
 
-export const getCurrentTheme = (flags: {
-  rainbowMode: boolean;
-  retroMode: boolean;
-  cyberpunkMode: boolean;
-  oceanMode: boolean;
-  fireMode: boolean;
-  isHackerMode: boolean;
-  matrixMode: boolean;
-}): ThemeKey => {
-  if (flags.rainbowMode) return "rainbow";
-  if (flags.retroMode) return "retro";
-  if (flags.cyberpunkMode) return "cyberpunk";
-  if (flags.oceanMode) return "ocean";
-  if (flags.fireMode) return "fire";
-  if (flags.isHackerMode) return "hacker";
-  if (flags.matrixMode) return "matrix";
+export const getCurrentTheme = (): ThemeKey => {
   return "default";
 };

@@ -39,7 +39,7 @@ export default function CommentsForm({
   return (
     <>
       <motion.h2
-        className={`text-4xl md:text-6xl font-bold text-center mb-4 bg-clip-text text-transparent bg-gradient-to-r ${theme.primary}`}
+        className="text-4xl md:text-6xl font-bold text-center mb-4 text-blue-300"
         initial={{ opacity: 0, y: 20 }}
         whileInView={{ opacity: 1, y: 0 }}
         viewport={{ once: true }}
@@ -47,7 +47,7 @@ export default function CommentsForm({
       >
         {title}
       </motion.h2>
-      <p className={`text-center mb-12 ${theme.accent}`}>{subtitle}</p>
+      <p className="text-center mb-12 text-blue-300">{subtitle}</p>
 
       <motion.form
         onSubmit={onSubmit}

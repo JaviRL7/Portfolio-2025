@@ -1,153 +1,167 @@
 import { Code, Rocket, Terminal, Database, Cpu, Layers } from "lucide-react";
+import { 
+  SiPython, 
+  SiJavascript, 
+  SiReact, 
+  SiPhp, 
+  SiOpenjdk, 
+  SiPostgresql, 
+  SiLaravel, 
+  SiNextdotjs, 
+  SiTypescript, 
+  SiTailwindcss 
+} from "react-icons/si";
 import type { ProjectItem, Skill } from "./types";
 
 export const skills: Skill[] = [
   {
-    name: { es: "React", en: "React" },
-    level: 95,
-    icon: <Code className="w-6 h-6" />,
+    name: { es: "Python", en: "Python" },
+    level: 92,
+    icon: <SiPython className="w-6 h-6 text-blue-400" />,
   },
   {
-    name: { es: "Next.js", en: "Next.js" },
-    level: 98,
-    icon: <Rocket className="w-6 h-6" />,
-  },
-  {
-    name: { es: "TypeScript", en: "TypeScript" },
-    level: 96,
-    icon: <Terminal className="w-6 h-6" />,
-  },
-  {
-    name: { es: "Node.js", en: "Node.js" },
-    level: 85,
-    icon: <Database className="w-6 h-6" />,
-  },
-  {
-    name: { es: "Prisma", en: "Prisma" },
+    name: { es: "JavaScript", en: "JavaScript" },
     level: 88,
-    icon: <Cpu className="w-6 h-6" />,
+    icon: <SiJavascript className="w-6 h-6 text-yellow-400" />,
+  },
+  {
+    name: { es: "React", en: "React" },
+    level: 85,
+    icon: <SiReact className="w-6 h-6 text-cyan-400" />,
+  },
+  {
+    name: { es: "PHP", en: "PHP" },
+    level: 90,
+    icon: <SiPhp className="w-6 h-6 text-purple-400" />,
+  },
+  {
+    name: { es: "Java", en: "Java" },
+    level: 78,
+    icon: <img src="/java-icon.svg" alt="Java" className="w-6 h-6" />,
   },
   {
     name: { es: "PostgreSQL", en: "PostgreSQL" },
-    level: 95,
-    icon: <Database className="w-6 h-6" />,
+    level: 87,
+    icon: <SiPostgresql className="w-6 h-6 text-blue-500" />,
   },
   {
-    name: { es: "UI/UX", en: "UI/UX" },
-    level: 92,
-    icon: <Layers className="w-6 h-6" />,
+    name: { es: "Laravel", en: "Laravel" },
+    level: 82,
+    icon: <SiLaravel className="w-6 h-6 text-red-500" />,
+  },
+  {
+    name: { es: "Next.js", en: "Next.js" },
+    level: 79,
+    icon: <SiNextdotjs className="w-6 h-6 text-white" />,
+  },
+  {
+    name: { es: "TypeScript", en: "TypeScript" },
+    level: 81,
+    icon: <SiTypescript className="w-6 h-6 text-blue-600" />,
   },
   {
     name: { es: "Tailwind CSS", en: "Tailwind CSS" },
-    level: 95,
-    icon: <Layers className="w-6 h-6" />,
+    level: 86,
+    icon: <SiTailwindcss className="w-6 h-6 text-cyan-500" />,
   },
   {
-    name: { es: "Docker", en: "Docker" },
-    level: 65,
+    name: { es: "Machine Learning", en: "Machine Learning" },
+    level: 74,
     icon: <Cpu className="w-6 h-6" />,
-  },
-  {
-    name: { es: "API REST / Swagger", en: "REST API / Swagger" },
-    level: 95,
-    icon: <Code className="w-6 h-6" />,
   },
 ];
 
 export const projects: ProjectItem[] = [
   {
-  title: { es: "Punky Pet", en: "Punky Pet" },
+  title: { es: "Gunlim", en: "Gunlim" },
   description: {
-    es: "eCommerce full stack para productos y accesorios para mascotas con panel de administración, pagos online y estadísticas en tiempo real.",
-    en: "Full stack eCommerce for pet products and accessories with admin panel, online payments, and real-time statistics.",
+    es: "Web dedicada a la escena competitiva de League of Legends. Funcionalidades: estadísticas de jugadores y equipos, valoración post-partida, foros, panel de moderación y gestión de contenido.",
+    en: "Website dedicated to the competitive League of Legends scene. Features: player and team statistics, post-game rating, forums, moderation panel and content management.",
   },
   tech: [
-    "Next.js",
-    "React",
-    "TypeScript",
-    "Tailwind CSS",
-    "React Hook Form",
-    "Formik",
-    "Axios",
-    "Swiper",
-    "Recharts",
-    "Node.js",
-    "Express",
-    "Prisma",
-    "PostgreSQL",
-    "MercadoPago SDK",
-    "Cloudinary",
-    "JWT",
-    "Nodemailer",
-    "Swagger"
+    "PHP",
+    "CSS",
+    "HTML",
+    "JavaScript",
+    "Hack",
+    "Laravel"
   ],
-  image: "/punkypet.png",
-  link: "https://github.com/Joaco-Martinez/eComerceAnimals",
+  image: "/gunlim.jpeg",
+  link: "https://github.com/JaviRL7/Arena",
 },
 
   {
-  title: { es: "KasApp", en: "KasApp" },
+  title: { es: "NBA 3X3", en: "NBA 3X3" },
   description: {
-    es: "Frontend de plataforma web para gestión de inmobiliarias con autenticación, dashboard y manejo visual de propiedades, desarrollado con Next.js, Tailwind CSS y múltiples integraciones.",
-    en: "Frontend for a real estate management platform with authentication, dashboard, and visual property management, built with Next.js, Tailwind CSS, and multiple integrations.",
+    es: "Juego web de tablero 3x3 con jugadores que pasaron por dos equipos distintos. API: balldontlie.io. Backend en Express para peticiones.",
+    en: "3x3 web board game with players who played for two different teams. API: balldontlie.io. Express backend for requests.",
+  },
+  tech: [
+    "React",
+    "Tailwind CSS",
+    "TypeScript",
+    "CSS",
+    "JavaScript",
+    "HTML",
+    "Express"
+  ],
+  image: "/nba.jpeg",
+  link: "https://github.com/JaviRL7/NBA",
+},
+  {
+  title: { es: "Temperatura API", en: "Temperatura API" },
+  description: {
+    es: "App del clima fusionada con mini-portfolio visual. Funciones: consumo de APIs, descarga de CV, UI dinámica responsive, cambios visuales según clima, animaciones.",
+    en: "Weather app merged with visual mini-portfolio. Functions: API consumption, CV download, responsive dynamic UI, visual changes based on weather, animations.",
+  },
+  tech: [
+    "TypeScript",
+    "JavaScript",
+    "CSS",
+    "HTML"
+  ],
+  image: "/Temperatura.PNG",
+  link: "https://github.com/JaviRL7/Temperatura",
+},
+  {
+  title: { es: "BOT-OPOS", en: "BOT-OPOS" },
+  description: {
+    es: "Asistente conversacional con Python y modelos de lenguaje. Funciones: subir PDFs, generar resúmenes, crear tests tipo examen. Enfoque en estudiantes de oposiciones.",
+    en: "Conversational assistant with Python and language models. Functions: upload PDFs, generate summaries, create exam-type tests. Focus on competitive exam students.",
+  },
+  tech: [
+    "Python"
+  ],
+  image: "/BOTOPOS.PNG",
+  link: "https://github.com/JaviRL7/BOT-opos",
+},
+  {
+  title: { es: "Doña Araña e-commerce", en: "Doña Araña e-commerce" },
+  description: {
+    es: "Tienda online para un negocio de lanas y manualidades. Funcionalidades: sistema de compras, gestión de pedidos, panel de administración, apartados personalizados para clientes.",
+    en: "Online store for a yarn and crafts business. Features: shopping system, order management, admin panel, customized sections for customers.",
   },
   tech: [
     "Next.js",
-    "React",
     "TypeScript",
-    "Tailwind CSS",
-    "Framer Motion",
-    "Axios",
-    "React Hook Form",
-    "Yup",
-    "Formik",
-    "Stripe.js",
-    "JWT Decode",
-    "Lucide React",
-    "React Icons",
-    "Swiper"
+    "CSS",
+    "JavaScript"
   ],
-  image: "/Kasapp.png",
-  link: "https://github.com/Joaco-Martinez/KasApp",
+  image: "/tienda.png",
+  link: "https://github.com/JaviRL7/Tienda2025",
 },
   {
-  title: { es: "ManzanaTech", en: "ManzanaTech" },
+  title: { es: "Daltonismo", en: "Daltonismo" },
   description: {
-    es: "Frontend de eCommerce especializado en productos Apple con carrito, checkout y gestión visual de productos, desarrollado con Next.js y Tailwind CSS.",
-    en: "Frontend for an eCommerce specialized in Apple products with cart, checkout, and visual product management, built with Next.js and Tailwind CSS.",
+    es: "Juego web para comprobar el daltonismo y juego de identificación de colores. Funcionalidades: pruebas de percepción cromática, ejercicios para diferenciar colores, y herramientas de diagnóstico visual.",
+    en: "Web game to test color blindness and color identification game. Features: chromatic perception tests, color differentiation exercises, and visual diagnostic tools.",
   },
   tech: [
-    "Next.js",
-    "React",
-    "TypeScript",
-    "Tailwind CSS",
-    "Formik",
-    "Yup",
-    "Axios",
-    "React Toastify",
-    "Classnames"
+    "JavaScript",
+    "CSS",
+    "HTML"
   ],
-  image: "/manzanatech.png",
-  link: "https://github.com/Joaco-Martinez/FrontEnd-PM4",
-},
-  {
-  title: { es: "Trip Moon", en: "Trip Moon" },
-  description: {
-    es: "Proyecto full stack para reservar y gestionar viajes a la Luna, con frontend en Vite + React y backend en Node.js, Express y TypeORM conectado a PostgreSQL.",
-    en: "Full stack project for booking and managing trips to the Moon, with a frontend in Vite + React and a backend in Node.js, Express, and TypeORM connected to PostgreSQL.",
-  },
-  tech: [
-    "Vite",
-    "React",
-    "TypeScript",
-    "React Router",
-    "Axios",
-    "Node.js",
-    "Express",
-    "TypeORM",
-    "PostgreSQL"
-  ],
-  image: "/Tripmoon.png",
-  link: "https://github.com/Joaco-Martinez/PM3",
+  image: "/Daltonismo.PNG",
+  link: "https://github.com/JaviRL7/Daltonismo",
 },
 ];

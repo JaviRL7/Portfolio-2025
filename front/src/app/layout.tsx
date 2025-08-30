@@ -9,34 +9,34 @@ const inter = Inter({ subsets: ["latin"], display: "swap" });
 export const metadata: Metadata = {
   metadataBase: new URL("https://www.joacodev.com.ar"),
   title: {
-    default: "Joaquin Martinez – Full Stack Developer",
-    template: "%s | Joaquin Martinez",
+    default: "Javier Rodriguez - Full Stack Developer",
+    template: "%s | Javier Rodriguez",
   },
   description:
-    "Portfolio de Joaquin Martinez. Desarrollo full stack, frontend enfocado en UI/UX y performance.",
+    "Portfolio de Javier Rodriguez. Desarrollo full stack, backend enfocado en Python, PHP y bases de datos.",
   alternates: {
     canonical: "/",
   },
   openGraph: {
     type: "website",
     url: "/",
-    siteName: "Joaquin Martinez – Portfolio",
-    title: "Joaquin Martinez – Full Stack Developer",
+    siteName: "Javier Rodriguez – Portfolio",
+    title: "Javier Rodriguez - Full Stack Developer",
     description:
-      "Experiencias web atractivas: performance, animaciones y UX.",
+      "Desarrollador especializado en backend, bases de datos y automatización con IA.",
     images: [
       {
         url: "/Captura de pantalla 2025-08-12 012551.png", // 1200x630 recomendado
         width: 1200,
         height: 630,
-        alt: "Portfolio de Joaquin Martinez",
+        alt: "Portfolio de Javier Rodriguez",
       },
     ],
   },
 
   icons: {
-    icon: "/favicon.ico",
-    apple: "/apple-touch-icon.png",
+    icon: "/logoJavi.svg",
+    apple: "/logoJavi.svg",
   },
   robots: {
     index: true,
@@ -55,7 +55,7 @@ export default function RootLayout({
 }) {
   return (
     <html lang="es">
-      <body className={inter.className}>
+      <body className={inter.className} suppressHydrationWarning={true}>
         <LanguageProvider>{children}</LanguageProvider>
       </body>
     </html>

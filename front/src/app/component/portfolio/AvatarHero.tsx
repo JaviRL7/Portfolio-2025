@@ -11,14 +11,14 @@ interface Props {
 export default function AvatarHero({ onAvatarClick, clickCount, avatarSrc }: Props) {
   return (
     <div className="mb-8">
-      <div className="relative w-32 h-32 mx-auto">
+      <div className="relative w-48 h-48 mx-auto">
         {/* Anillo degradado que rota */}
         <motion.div
-          className="absolute inset-0 rounded-full p-[3px]"
+          className="absolute inset-0 rounded-lg p-[3px]"
           animate={{ rotate: 360 }}
           transition={{ duration: 20, repeat: Number.POSITIVE_INFINITY, ease: "linear" }}
         >
-          <div className="w-full h-full rounded-full bg-gradient-to-r from-black-500 via-pink-500 to-black-500" />
+          <div className="w-full h-full rounded-lg bg-gradient-to-r from-black-500 via-pink-500 to-black-500" />
         </motion.div>
 
         {/* Contenedor clickeable con el avatar */}
@@ -27,13 +27,13 @@ export default function AvatarHero({ onAvatarClick, clickCount, avatarSrc }: Pro
           onClick={onAvatarClick}
           whileHover={{ scale: 1.06 }}
           whileTap={{ scale: 0.94 }}
-          className="relative w-full h-full rounded-full overflow-hidden border-4 border-violet-500 shadow-2xl shadow-purple-500/50 bg-neutral-900"
+          className="relative w-full h-full rounded-lg overflow-hidden border-4 border-violet-500 shadow-2xl shadow-purple-500/50 bg-neutral-900"
         >
           <Image
             src={avatarSrc}
-            alt="Avatar de Joaquín"
+            alt="Avatar de Javier"
             fill
-            sizes="128px"
+            sizes="192px"
             className="object-cover"
             priority
           />

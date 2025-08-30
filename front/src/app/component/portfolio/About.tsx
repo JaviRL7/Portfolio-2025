@@ -35,7 +35,7 @@ export default function About({ theme, isHacker, stats, skills }: Props) {
     <section className="py-20 px-4 relative z-10">
       <div className="max-w-6xl mx-auto">
         <motion.h2
-          className={`text-4xl md:text-6xl font-bold text-center mb-16 bg-clip-text text-transparent bg-gradient-to-r ${theme.primary}`}
+          className="text-4xl md:text-6xl font-bold text-center mb-16 text-blue-300"
           initial={{ opacity: 0, y: 50 }}
           whileInView={{ opacity: 1, y: 0 }}
           transition={{ duration: 0.8 }}
@@ -44,46 +44,30 @@ export default function About({ theme, isHacker, stats, skills }: Props) {
           {heading}
         </motion.h2>
 
-        <div className="grid md:grid-cols-2 gap-12 items-center">
-          {/* Texto */}
+        <div className="grid md:grid-cols-2 gap-12">
+          {/* Bio Text */}
           <motion.div
             initial={{ opacity: 0, x: -50 }}
             whileInView={{ opacity: 1, x: 0 }}
             transition={{ duration: 0.8 }}
             viewport={{ once: true }}
+            className="relative flex flex-col justify-center min-h-[400px] pt-20 px-4"
           >
-            <div className="relative">
-              <div className={`absolute inset-0 rounded-lg blur-xl opacity-30 bg-gradient-to-r ${theme.secondary}`} />
-              <div className={`relative backdrop-blur-sm rounded-lg p-8 bg-gray-900/50 border ${theme.border}`}>
-                <p className="text-lg text-gray-300 leading-relaxed mb-6">
-                  {isHacker
-                    ? (language === "es"
-                        ? "system.log → Full Stack orientado a crear interfaces con identidad propia en la capa frontend y producto sólido end-to-end."
-                        : "system.log → Full Stack focused on building bold frontends and solid end-to-end products.")
-                    : (language === "es"
-                        ? "Desarrollador full stack enfocado en rendimiento, UX y micro-interacciones que suman valor al producto."
-                        : "Full-stack developer focused on performance, UX, and delightful micro-interactions.")}
-                </p>
+            <p className="text-lg text-gray-300 leading-relaxed mb-6">
+              {language === "es"
+                ? "Desarrollador web especializado en backend, con experiencia en Python, PHP, JavaScript y React. Amplio dominio en la gestión y análisis de bases de datos, así como en la optimización de procesos y flujos de trabajo."
+                : "Web developer specialized in backend, with experience in Python, PHP, JavaScript and React. Extensive expertise in database management and analysis, as well as process and workflow optimization."}
+            </p>
 
-                <p className="text-lg text-gray-300 leading-relaxed">
-                  {isHacker
-                    ? (language === "es"
-                        ? "mission.status → Prototipos rápidos, interfaces fluidas y código mantenible."
-                        : "mission.status → Rapid prototyping, fluid interfaces, and maintainable code.")
-                    : (language === "es"
-                        ? "Mi objetivo: prototipar rápido, entregar interfaces fluidas y mantener un código claro."
-                        : "Goal: prototype fast, ship fluid interfaces, and keep the codebase clean.")}
-                </p>
+            <p className="text-lg text-gray-300 leading-relaxed mb-8">
+              {language === "es"
+                ? "Desarrollo de proyectos personales con inteligencia artificial, incluyendo machine learning, procesamiento de datos y automatización de tareas con IA. Mi objetivo es aportar soluciones técnicas sólidas y eficientes en proyectos desafiantes y multidisciplinarios, siempre con muchas ganas de aprender, crecer profesionalmente y aportar valor a los equipos en los que colabore."
+                : "Development of personal projects with artificial intelligence, including machine learning, data processing and AI task automation. My goal is to provide solid and efficient technical solutions in challenging and multidisciplinary projects, always eager to learn, grow professionally and add value to the teams I collaborate with."}
+            </p>
 
-                <div className="mt-6 text-sm text-gray-500 space-y-1">
-                  <p>☕ {language === "es" ? "Café consumido" : "Coffee consumed"}: {stats.coffee} {language === "es" ? "tazas" : "cups"}</p>
-                  <p>🖱️ {language === "es" ? "Clicks en avatar" : "Avatar clicks"}: {stats.clicks}/10</p>
-                  <p>⏰ {language === "es" ? "Tiempo en página" : "Time on page"}: {Math.floor(stats.timeSpent / 60)}m {stats.timeSpent % 60}s</p>
-                  <p>📜 {language === "es" ? "Scrolls realizados" : "Scrolls made"}: {stats.scrolls}</p>
-                  <p>💚 {language === "es" ? "Easter eggs encontrados" : "Easter eggs found"}: {stats.activeFlags}/15</p>
-                </div>
-              </div>
-            </div>
+
+            {/* Vertical line separator */}
+            <div className="absolute right-0 top-0 bottom-0 w-px bg-gradient-to-b from-transparent via-indigo-400/30 to-transparent hidden md:block"></div>
           </motion.div>
 
           {/* Barras de uso (no “skills”) */}
@@ -92,7 +76,7 @@ export default function About({ theme, isHacker, stats, skills }: Props) {
             whileInView={{ opacity: 1, x: 0 }}
             transition={{ duration: 0.8 }}
             viewport={{ once: true }}
-            className="space-y-6"
+            className="space-y-6 mt-24 px-4"
             aria-label={usageLabel}
           >
             <div className="mb-2 text-sm text-gray-400">{usageLabel}</div>

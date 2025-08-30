@@ -14,27 +14,27 @@ export default function Contact({ theme, isHacker }: Props) {
 
   const heading = isHacker
     ? (language === "es" ? "ESTABLISH_CONNECTION()" : "ESTABLISH_CONNECTION()")
-    : (language === "es" ? "CONECTEMOS" : "LET'S CONNECT");
+    : (language === "es" ? "CONTACTO" : "CONTACT");
 
   const sub = isHacker
     ? (language === "es"
         ? "¿Tenés un sistema que necesita ser... mejorado? ¡Iniciemos la conexión!"
         : "Got a system that needs to be... improved? Let’s establish the link!")
     : (language === "es"
-        ? "¿Tenés un proyecto en mente? ¡Hablemos y creemos algo increíble juntos!"
-        : "Got a project in mind? Let’s talk and build something great!");
+        ? "¿Estás buscando a un nuevo desarrollador? Hablemos y creemos algo juntos."
+        : "Are you looking for a new developer? Let's talk and create something together.");
 
   const socials = [
     {
       icon: <Github className="w-6 h-6" />,
       label: language === "es" ? "GitHub" : "GitHub",
-      href: "https://github.com/Joaco-Martinez",
+      href: "https://github.com/JaviRL7",
       hover: "hover:text-gray-400",
     },
     {
       icon: <Linkedin className="w-6 h-6" />,
       label: language === "es" ? "LinkedIn" : "LinkedIn",
-      href: "https://www.linkedin.com/in/joaquin-martinez-0669642aa",
+      href: "https://www.linkedin.com/in/javier-rodriguez-lopez-4795a8180/",
       hover: "hover:text-blue-400",
     },
     {
@@ -46,7 +46,7 @@ export default function Contact({ theme, isHacker }: Props) {
     {
       icon: <Mail className="w-6 h-6" />,
       label: language === "es" ? "Correo" : "Email",
-      href: "mailto:joaco.martinnez1480@gmail.com", // Ej: `mailto:tuemail@dominio.com`
+      href: "mailto:jrlsanlucar11@gmail.com", // Ej: `mailto:tuemail@dominio.com`
       hover: "hover:text-purple-400",
     },
   ];
@@ -55,7 +55,7 @@ export default function Contact({ theme, isHacker }: Props) {
     <section id="contacto" className="py-20 px-4 relative z-10">
       <div className="max-w-4xl mx-auto text-center">
         <motion.h2
-          className={`text-4xl md:text-6xl font-bold mb-8 bg-clip-text text-transparent bg-gradient-to-r ${theme.primary}`}
+          className="text-4xl md:text-6xl font-bold mb-8 text-blue-300"
           initial={{ opacity: 0, y: 50 }}
           whileInView={{ opacity: 1, y: 0 }}
           transition={{ duration: 0.8 }}
