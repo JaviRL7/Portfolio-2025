@@ -14,6 +14,12 @@ export function createApp() {
   app.use(cookieParser());
   app.use(cors({ origin: true, credentials: true }));
 
+  app.get("/", (_req, res) => res.json({ 
+    status: "ok", 
+    message: "Portfolio API is running",
+    timestamp: new Date().toISOString()
+  }));
+
   app.get("/health", (_req, res) => res.json({ ok: true }));
 
   app.use("/comments", commentsRouter);
