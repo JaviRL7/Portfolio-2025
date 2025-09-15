@@ -120,10 +120,12 @@ export default function ProjectModal({
                   <Image
                     src={src}
                     alt={`${title} screenshot ${i + 1}`}
-                    width={200}
-                    height={200}
+                    width={800}
+                    height={450}
                     className="h-[360px] w-full object-cover"
                     draggable={false}
+                    quality={100}
+                    priority={i === 0}
                   />
                 </div>
               ))}
