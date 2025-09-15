@@ -108,8 +108,8 @@ export const projects: ProjectItem[] = [
     "HTML",
     "Express"
   ],
-  image: "/nba.jpeg",
-  images: ["/nba.jpeg", "/NBA2.png", "/NBA3.png"],
+  image: "/NBA2.png",
+  images: ["/NBA2.png", "/NBA3.png"],
   link: "https://github.com/JaviRL7/NBA",
 },
   {
