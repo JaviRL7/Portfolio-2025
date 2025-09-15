@@ -182,7 +182,7 @@ export const projects: ProjectItem[] = [
     "Tailwind CSS",
     "Vite"
   ],
-  image: "/contabilidad-dona-arana.png",
+  image: "/BOTOPOS.PNG",
   link: "https://github.com/JaviRL7/contabilidad-web",
 },
 ];
