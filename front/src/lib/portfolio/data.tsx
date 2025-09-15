@@ -109,6 +109,7 @@ export const projects: ProjectItem[] = [
     "Express"
   ],
   image: "/nba.jpeg",
+  images: ["/nba.jpeg", "/NBA2.png", "/NBA3.png"],
   link: "https://github.com/JaviRL7/NBA",
 },
   {
@@ -182,7 +183,8 @@ export const projects: ProjectItem[] = [
     "Tailwind CSS",
     "Vite"
   ],
-  image: "/BOTOPOS.PNG",
-  link: "https://github.com/JaviRL7/contabilidad-web",
+  image: "/c1.PNG",
+  images: ["/c1.PNG", "/c2.PNG", "/c3.PNG", "/c4.PNG", "/c5.PNG", "/c6.PNG", "/c7.PNG", "/c8.PNG"],
+  link: "https://github.com/JaviRL7/Contabilidad-DA",
 },
 ];

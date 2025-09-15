@@ -38,5 +38,6 @@ export interface ProjectItem {
   };
   tech: string[];
   image: string;
+  images?: string[];
   link: string;
 }
