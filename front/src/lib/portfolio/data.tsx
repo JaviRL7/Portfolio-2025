@@ -9,7 +9,10 @@ import {
   SiLaravel, 
   SiNextdotjs, 
   SiTypescript, 
-  SiTailwindcss 
+  SiTailwindcss,
+  SiFastapi,
+  SiSqlite,
+  SiVite
 } from "react-icons/si";
 import type { ProjectItem, Skill } from "./types";
 
@@ -163,5 +166,23 @@ export const projects: ProjectItem[] = [
   ],
   image: "/Daltonismo.PNG",
   link: "https://github.com/JaviRL7/Daltonismo",
+},
+  {
+  title: { es: "Contabilidad Doña Araña", en: "Contabilidad Doña Araña" },
+  description: {
+    es: "Dedicado a mi madre y a todos los pequeños comerciantes. Sistema de contabilidad simple y automático enfocado en facilidad de uso para personas de mediana edad. Incluye historial de movimientos, búsqueda inteligente, gestión de etiquetas, gastos recurrentes, análisis con gráficos interactivos y calendario financiero.",
+    en: "Dedicated to my mother and all small merchants. Simple and automatic accounting system focused on ease of use for middle-aged people. Includes transaction history, smart search, tag management, recurring expenses, analysis with interactive charts and financial calendar.",
+  },
+  tech: [
+    "React",
+    "TypeScript", 
+    "FastAPI",
+    "Python",
+    "SQLite",
+    "Tailwind CSS",
+    "Vite"
+  ],
+  image: "/contabilidad-dona-arana.png",
+  link: "https://github.com/JaviRL7/contabilidad-web",
 },
 ];

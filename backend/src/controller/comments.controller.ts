@@ -17,7 +17,7 @@ export class CommentsController {
       const created = await this.svc.create(req.body);
 
       const owner = process.env.OWNER_EMAIL;
-      if (owner) {
+      if (owner && process.env.SMTP_HOST && process.env.SMTP_HOST !== "smtp.tu-proveedor.com") {
         const esc = (s: string) => s.replace(/[&<>"']/g, ch => ({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[ch]!));
         const fecha = new Date(created.createdAt).toLocaleString("es-AR");
         const html = `
