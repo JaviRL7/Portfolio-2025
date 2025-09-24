@@ -109,7 +109,7 @@ export default function Projects({ theme, isHacker, projects }: Props) {
                         {p.tech.map((t) => (
                           <span
                             key={t}
-                            className={`px-3 py-1 rounded-md text-sm font-medium border border-white text-white bg-transparent`}
+                            className={`px-3 py-1 rounded-md text-sm font-medium text-gray-300/90`}
                           >
                             {t}
                           </span>

@@ -58,40 +58,46 @@ export default function CommentsForm({
         transition={{ duration: 0.5, delay: 0.05 }}
       >
         <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
-          <div>
-            <label className="text-sm opacity-80">{t.name}</label>
+          <div className="relative">
             <Input
               value={name}
               onChange={(e) => onChangeName(e.target.value)}
-              placeholder={t.namePh}
-              className="mt-1 bg-transparent"
+              placeholder=" "
+              className="mt-1 bg-transparent peer"
               required
               {...stopModes}
             />
+            <label className="absolute left-3 top-1 text-sm opacity-80 transition-all peer-placeholder-shown:top-1/2 peer-placeholder-shown:-translate-y-1/2 peer-placeholder-shown:text-base peer-focus:top-1 peer-focus:text-sm pointer-events-none">
+              {t.name}
+            </label>
           </div>
-          <div>
-            <label className="text-sm opacity-80">{t.role}</label>
+          <div className="relative">
             <Input
               value={role}
               onChange={(e) => onChangeRole(e.target.value)}
-              placeholder={t.rolePh}
-              className="mt-1 bg-transparent"
+              placeholder={" "}
+              className="mt-1 bg-transparent peer"
               {...stopModes}
             />
+            <label className="absolute left-3 top-1 text-sm opacity-80 transition-all peer-placeholder-shown:top-1/2 peer-placeholder-shown:-translate-y-1/2 peer-placeholder-shown:text-base peer-focus:top-1 peer-focus:text-sm pointer-events-none">
+              {t.role}
+            </label>
           </div>
         </div>
 
-        <div className="mt-4">
-          <label className="text-sm opacity-80">{t.msg}</label>
+        <div className="mt-4 relative">
           <Textarea
             value={message}
             onChange={(e) => onChangeMessage(e.target.value)}
-            placeholder={isHacker ? t.msgPhHacker : t.msgPhNormal}
-            className="mt-1 min-h-[110px] bg-transparent"
+            placeholder={" "}
+            className="mt-1 min-h-[110px] bg-transparent peer pt-6"
             maxLength={300}
             required
             {...stopModes}
           />
+          <label className="absolute left-3 top-3 text-sm opacity-80 transition-all peer-placeholder-shown:top-6 peer-placeholder-shown:text-base peer-focus:top-3 peer-focus:text-sm pointer-events-none">
+            {t.msg}
+          </label>
           <div className="flex items-center justify-between mt-2 text-xs opacity-70">
             <span>{remaining} {t.chars}</span>
             <span className="flex items-center gap-1"><MessageSquare size={14} /> {t.instant}</span>

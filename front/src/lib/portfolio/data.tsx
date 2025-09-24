@@ -126,6 +126,7 @@ export const projects: ProjectItem[] = [
   ],
   image: "/Temperatura.PNG",
   link: "https://github.com/JaviRL7/Temperatura",
+  demoUrl: "https://dynamic-longma-749da6.netlify.app/",
 },
   {
   title: { es: "BOT-OPOS", en: "BOT-OPOS" },
@@ -152,6 +153,7 @@ export const projects: ProjectItem[] = [
     "JavaScript"
   ],
   image: "/tienda.png",
+  images: ["/D1.JFIF", "/D2.JFIF", "/D3.JFIF", "/D4.JFIF"],
   link: "https://github.com/JaviRL7/Tienda2025",
 },
   {
@@ -167,6 +169,7 @@ export const projects: ProjectItem[] = [
   ],
   image: "/Daltonismo.PNG",
   link: "https://github.com/JaviRL7/Daltonismo",
+  demoUrl: "https://daltonismo.vercel.app/",
 },
   {
   title: { es: "Contabilidad Doña Araña", en: "Contabilidad Doña Araña" },

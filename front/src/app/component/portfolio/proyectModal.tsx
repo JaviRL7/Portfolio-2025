@@ -166,7 +166,7 @@ export default function ProjectModal({
                 {stack.map((s, i) => (
                   <span
                     key={i}
-                    className="rounded-full border border-violet-400/25 bg-violet-500/10 px-3 py-1 text-sm text-violet-200"
+                    className="px-3 py-1 text-sm text-gray-300/90"
                   >
                     {s}
                   </span>
