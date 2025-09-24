@@ -40,4 +40,6 @@ export interface ProjectItem {
   image: string;
   images?: string[];
   link: string;
+  demoUrl?: string;
+  featured?: boolean;
 }
