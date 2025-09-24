@@ -57,7 +57,7 @@ export default function CommentsForm({
         viewport={{ once: true }}
         transition={{ duration: 0.5, delay: 0.05 }}
       >
-        <div className="space-y-6">
+        <div className="space-y-8">
           <div className="relative">
             <input
               type="text"

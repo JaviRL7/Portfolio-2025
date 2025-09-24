@@ -85,14 +85,14 @@ export default function CommentsCarousel({ comments, theme }: Props) {
           <button
             aria-label="Prev"
             onClick={() => instanceRef.current?.prev()}
-            className={`absolute -left-8 lg:-left-10 top-1/2 -translate-y-1/2 z-10 rounded-full border ${theme.border} bg-black/30 backdrop-blur-md p-2 hover:bg-black/50 transition`}
+            className={`absolute -left-12 lg:-left-16 top-1/2 -translate-y-1/2 z-10 rounded-full border ${theme.border} bg-black/30 backdrop-blur-md p-2 hover:bg-black/50 transition`}
           >
             <ChevronLeft className={`${theme.accent} h-5 w-5`} />
           </button>
           <button
             aria-label="Next"
             onClick={() => instanceRef.current?.next()}
-            className={`absolute -right-8 lg:-right-10 top-1/2 -translate-y-1/2 z-10 rounded-full border ${theme.border} bg-black/30 backdrop-blur-md p-2 hover:bg-black/50 transition`}
+            className={`absolute -right-12 lg:-right-16 top-1/2 -translate-y-1/2 z-10 rounded-full border ${theme.border} bg-black/30 backdrop-blur-md p-2 hover:bg-black/50 transition`}
           >
             <ChevronRight className={`${theme.accent} h-5 w-5`} />
           </button>

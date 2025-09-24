@@ -152,8 +152,8 @@ export const projects: ProjectItem[] = [
     "CSS",
     "JavaScript"
   ],
-  image: "/tienda.png",
-  images: ["/D1.JFIF", "/D2.JFIF", "/D3.JFIF", "/D4.JFIF"],
+  image: "/D1.jfif",
+  images: ["/D1.jfif", "/D2.jfif", "/D3.jfif", "/D4.jfif"],
   link: "https://github.com/JaviRL7/Tienda2025",
 },
   {
