@@ -51,64 +51,67 @@ export default function CommentsForm({
 
       <motion.form
         onSubmit={onSubmit}
-        className={`mx-auto w-full md:w-3/4 lg:w-2/3 p-4 md:p-6 rounded-2xl shadow-xl border ${theme.border} bg-white/5 backdrop-blur-sm`}
+        className="mx-auto w-full md:w-3/4 lg:w-2/3 space-y-8"
         initial={{ opacity: 0, y: 20 }}
         whileInView={{ opacity: 1, y: 0 }}
         viewport={{ once: true }}
         transition={{ duration: 0.5, delay: 0.05 }}
       >
-        <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+        <div className="space-y-6">
           <div className="relative">
-            <Input
+            <input
+              type="text"
               value={name}
               onChange={(e) => onChangeName(e.target.value)}
-              placeholder=" "
-              className="mt-1 bg-transparent peer"
+              placeholder="John Doe"
+              className="w-full bg-transparent border-b-2 border-gray-600 focus:border-cyan-400 outline-none px-2 py-3 text-white placeholder-gray-500 transition-colors"
               required
               {...stopModes}
             />
-            <label className="absolute left-3 top-1 text-sm opacity-80 transition-all peer-placeholder-shown:top-1/2 peer-placeholder-shown:-translate-y-1/2 peer-placeholder-shown:text-base peer-focus:top-1 peer-focus:text-sm pointer-events-none">
+            <label className="absolute -top-5 left-0 text-xs text-gray-400 uppercase tracking-wider">
               {t.name}
             </label>
           </div>
+
           <div className="relative">
-            <Input
+            <input
+              type="text"
               value={role}
               onChange={(e) => onChangeRole(e.target.value)}
-              placeholder={" "}
-              className="mt-1 bg-transparent peer"
+              placeholder="Frontend Developer"
+              className="w-full bg-transparent border-b-2 border-gray-600 focus:border-cyan-400 outline-none px-2 py-3 text-white placeholder-gray-500 transition-colors"
               {...stopModes}
             />
-            <label className="absolute left-3 top-1 text-sm opacity-80 transition-all peer-placeholder-shown:top-1/2 peer-placeholder-shown:-translate-y-1/2 peer-placeholder-shown:text-base peer-focus:top-1 peer-focus:text-sm pointer-events-none">
+            <label className="absolute -top-5 left-0 text-xs text-gray-400 uppercase tracking-wider">
               {t.role}
             </label>
           </div>
-        </div>
 
-        <div className="mt-4 relative">
-          <Textarea
-            value={message}
-            onChange={(e) => onChangeMessage(e.target.value)}
-            placeholder={" "}
-            className="mt-1 min-h-[110px] bg-transparent peer pt-6"
-            maxLength={300}
-            required
-            {...stopModes}
-          />
-          <label className="absolute left-3 top-3 text-sm opacity-80 transition-all peer-placeholder-shown:top-6 peer-placeholder-shown:text-base peer-focus:top-3 peer-focus:text-sm pointer-events-none">
-            {t.msg}
-          </label>
-          <div className="flex items-center justify-between mt-2 text-xs opacity-70">
-            <span>{remaining} {t.chars}</span>
-            <span className="flex items-center gap-1"><MessageSquare size={14} /> {t.instant}</span>
+          <div className="relative">
+            <textarea
+              value={message}
+              onChange={(e) => onChangeMessage(e.target.value)}
+              placeholder={isHacker ? t.msgPhHacker : t.msgPhNormal}
+              className="w-full bg-transparent border-2 border-gray-600 focus:border-cyan-400 outline-none px-4 py-3 text-white placeholder-gray-500 transition-colors rounded-lg min-h-[120px] resize-none"
+              maxLength={300}
+              required
+              {...stopModes}
+            />
+            <label className="absolute -top-5 left-0 text-xs text-gray-400 uppercase tracking-wider">
+              {t.msg}
+            </label>
+            <div className="flex items-center justify-between mt-2 text-xs opacity-70">
+              <span>{remaining} {t.chars}</span>
+              <span className="flex items-center gap-1"><MessageSquare size={14} /> {t.instant}</span>
+            </div>
           </div>
         </div>
 
-        <div className="mt-5 flex justify-end">
+        <div className="mt-10 flex justify-end">
           <Button
             type="submit"
             disabled={loading || !name || !message}
-            className={`group rounded-2xl px-5 py-2 font-semibold shadow ${loading ? "opacity-60" : ""} bg-gradient-to-r ${theme.secondary}`}
+            className={`group rounded-2xl px-6 py-3 font-semibold shadow-lg ${loading ? "opacity-60" : ""} bg-gradient-to-r ${theme.secondary} hover:shadow-cyan-500/50 transition-all`}
           >
             <span className="mr-2">{t.send}</span>
             <Send className="h-4 w-4 group-hover:translate-x-0.5 transition-transform" />

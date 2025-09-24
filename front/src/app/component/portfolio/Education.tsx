@@ -34,7 +34,7 @@ export default function Education({ theme }: Props) {
           >
             <div className={`inline-block p-4 rounded-full mb-6 bg-gradient-to-r ${theme.secondary} bg-opacity-20`}>
               <div className="w-12 h-12 flex items-center justify-center">
-                <GraduationCap className="w-8 h-8 text-blue-400" />
+                <GraduationCap className="w-8 h-8 text-white" />
               </div>
             </div>
             <h3 className={`text-2xl font-bold mb-4 bg-gradient-to-r ${theme.primary} bg-clip-text text-transparent`}>
@@ -57,17 +57,24 @@ export default function Education({ theme }: Props) {
           >
             <div className={`inline-block p-4 rounded-full mb-6 bg-gradient-to-r ${theme.secondary} bg-opacity-20`}>
               <div className="w-12 h-12 flex items-center justify-center">
-                <Briefcase className="w-8 h-8 text-blue-400" />
+                <Briefcase className="w-8 h-8 text-white" />
               </div>
             </div>
             <h3 className={`text-2xl font-bold mb-4 bg-gradient-to-r ${theme.primary} bg-clip-text text-transparent`}>
               {language === "es" ? "Experiencia" : "Experience"}
             </h3>
-            <p className="text-lg text-gray-300 leading-relaxed">
-              {language === "es"
-                ? "Full Stack Developer en el Departamento de Infraestructura de Sanlúcar de Barrameda. Encargado de comunicaciones de Doña Araña y diseñador de aplicación de contabilidad y sitio web corporativo."
-                : "Full Stack Developer at the Infrastructure Department of Sanlúcar de Barrameda. Communications Manager at Doña Araña and designer of accounting application and corporate website."}
-            </p>
+            <div className="text-lg text-gray-300 leading-relaxed space-y-3">
+              <p>
+                {language === "es"
+                  ? "Full Stack Developer en el Departamento de Infraestructura de Sanlúcar de Barrameda."
+                  : "Full Stack Developer at the Infrastructure Department of Sanlúcar de Barrameda."}
+              </p>
+              <p>
+                {language === "es"
+                  ? "Encargado de comunicaciones de Doña Araña y diseñador de aplicación de contabilidad y sitio web corporativo."
+                  : "Communications Manager at Doña Araña and designer of accounting application and corporate website."}
+              </p>
+            </div>
           </motion.div>
         </div>
       </div>
