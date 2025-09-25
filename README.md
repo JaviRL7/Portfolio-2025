@@ -37,7 +37,7 @@ Un portfolio moderno y dinámico construido con tecnologías de vanguardia, que 
 - **Autoprefixer** - Prefijos CSS automáticos
 - **ts-node-dev** - Desarrollo con recarga automática
 
-## 📁 Estructura del Proyecto
+## 📁 Estructura de carpetas del Proyecto
 
 ```
 Portfolio/
