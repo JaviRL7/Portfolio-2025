@@ -1,6 +1,6 @@
-# 💼 Portfolio Personal
+#  Portfolio Personal
 
-Un portfolio moderno y dinámico construido con tecnologías de vanguardia, que incluye un sistema de comentarios interactivo, múltiples temas visuales y efectos de partículas envolventes.
+Un portfolio moderno y dinámico construido con tecnologías de vanguardia, que incluye un sistema de comentarios interactivo, múltiples temas visuales y efectos de partículas envolventes
 
 ## 🚀 Características Principales
 
