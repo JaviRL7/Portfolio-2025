@@ -31,7 +31,7 @@ const uid = () => Math.random().toString(36).slice(2, 9);
 const STRINGS = {
   es: {
     title: { normal: "COMENTARIOS", hacker: "GUESTBOOK.log" },
-    subtitle: { normal: "Dejame tu mensaje ✍️", hacker: "// Firma el repo humano" },
+    subtitle: { normal: "Dejame tu mensaje", hacker: "// Firma el repo humano" },
     name: "Nombre",
     role: "Rol (opcional)",
     rolePh: "Frontend, Tech Lead, Cliente, etc.",
@@ -46,7 +46,7 @@ const STRINGS = {
   },
   en: {
     title: { normal: "COMMENTS", hacker: "GUESTBOOK.log" },
-    subtitle: { normal: "Leave me your message ✍️", hacker: "// Sign the human repo" },
+    subtitle: { normal: "Leave me your message", hacker: "// Sign the human repo" },
     name: "Name",
     role: "Role (optional)",
     rolePh: "Frontend, Tech Lead, Client, etc.",
@@ -74,7 +74,7 @@ function CommentCard({
       className={`group h-full relative overflow-hidden rounded-2xl
       border ${theme.border} bg-white/[0.06] backdrop-blur-md
       ring-1 ring-white/10 shadow-[0_8px_30px_rgba(0,0,0,0.12)]
-      transition-all duration-300 hover:-translate-y-0.5 hover:shadow-[0_16px_50px_rgba(0,0,0,0.25)]`}
+      transition-all duration-300`}
     >
       {/* brillo sutil */}
       <div className="pointer-events-none absolute inset-0 opacity-0 group-hover:opacity-100 transition-opacity duration-300 bg-gradient-to-br from-white/10 to-transparent" />
@@ -184,64 +184,63 @@ export default function Comments({ theme, isHacker = false, initialComments = []
         {/* Formulario */}
         <motion.form
           onSubmit={handleSubmit}
-          className={`mx-auto w-full md:w-3/4 lg:w-2/3 p-4 md:p-6 rounded-2xl shadow-xl border ${theme.border} bg-white/5 backdrop-blur-sm`}
+          className="mx-auto w-full md:w-3/4 lg:w-2/3 space-y-8"
           initial={{ opacity: 0, y: 20 }}
           whileInView={{ opacity: 1, y: 0 }}
           viewport={{ once: true }}
           transition={{ duration: 0.5, delay: 0.05 }}
           {...stopModes}
         >
-          <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
-            <div>
-              <label className="text-sm opacity-80">{t.name}</label>
+          <div className="space-y-8">
+            <div className="relative">
               <Input
                 value={name}
                 onChange={(e) => setName(e.target.value)}
-                placeholder={t.namePh}
-                className="mt-1 bg-transparent"
+                placeholder="John Doe"
+                className="w-full bg-transparent border-b-2 border-gray-600 focus:border-cyan-400 outline-none px-2 py-3 text-white placeholder-gray-500 transition-colors"
                 required
                 {...stopModes}
               />
+              <label className="absolute -top-5 left-0 text-xs text-gray-400 uppercase tracking-wider">{t.name}</label>
             </div>
-            <div>
-              <label className="text-sm opacity-80">{t.role}</label>
+            <div className="relative">
               <Input
                 value={role}
                 onChange={(e) => setRole(e.target.value)}
-                placeholder={t.rolePh}
-                className="mt-1 bg-transparent"
+                placeholder="Frontend Developer"
+                className="w-full bg-transparent border-b-2 border-gray-600 focus:border-cyan-400 outline-none px-2 py-3 text-white placeholder-gray-500 transition-colors"
                 {...stopModes}
               />
+              <label className="absolute -top-5 left-0 text-xs text-gray-400 uppercase tracking-wider">{t.role}</label>
+            </div>
+            <div className="relative">
+              <Textarea
+                value={message}
+                onChange={(e) => setMessage(e.target.value)}
+                placeholder={isHacker ? t.msgPhHacker : t.msgPhNormal}
+                className="w-full bg-transparent border-2 border-gray-600 focus:border-cyan-400 outline-none px-4 py-3 text-white placeholder-gray-500 transition-colors rounded-lg min-h-[120px] resize-none"
+                maxLength={300}
+                required
+                {...stopModes}
+              />
+              <label className="absolute -top-5 left-0 text-xs text-gray-400 uppercase tracking-wider">{t.msg}</label>
+              <div className="flex items-center justify-between mt-2 text-xs opacity-70">
+                <span>
+                  {remaining} {t.chars}
+                </span>
+                <span className="flex items-center gap-1">
+                  <MessageSquare size={14} /> {t.instant}
+                </span>
+              </div>
             </div>
           </div>
 
-          <div className="mt-4">
-            <label className="text-sm opacity-80">{t.msg}</label>
-            <Textarea
-              value={message}
-              onChange={(e) => setMessage(e.target.value)}
-              placeholder={isHacker ? t.msgPhHacker : t.msgPhNormal}
-              className="mt-1 min-h-[110px] bg-transparent"
-              maxLength={300}
-              required
-              {...stopModes}
-            />
-            <div className="flex items-center justify-between mt-2 text-xs opacity-70">
-              <span>
-                {remaining} {t.chars}
-              </span>
-              <span className="flex items-center gap-1">
-                <MessageSquare size={14} /> {t.instant}
-              </span>
-            </div>
-          </div>
-
-          <div className="mt-5 flex justify-end">
+          <div className="mt-10 flex justify-end">
             <Button
               type="submit"
               disabled={loading || !name || !message}
-              className={`group rounded-2xl px-5 py-2 font-semibold shadow ${loading ? "opacity-60" : ""}
-              bg-gradient-to-r ${theme.secondary}`}
+              className={`group rounded-2xl px-6 py-3 font-semibold shadow-lg ${loading ? "opacity-60" : ""}
+              bg-gradient-to-r from-cyan-400 to-indigo-500 hover:shadow-cyan-500/50 transition-all`}
               {...stopModes}
             >
               <span className="mr-2">{t.send}</span>

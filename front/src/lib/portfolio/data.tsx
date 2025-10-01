@@ -155,6 +155,7 @@ export const projects: ProjectItem[] = [
   image: "/D1.jfif",
   images: ["/D1.jfif", "/D2.jfif", "/D3.jfif", "/D4.jfif"],
   link: "https://github.com/JaviRL7/Tienda2025",
+  demoUrl: "https://pure-gratitude-production-4381.up.railway.app/",
 },
   {
   title: { es: "Daltonismo", en: "Daltonismo" },

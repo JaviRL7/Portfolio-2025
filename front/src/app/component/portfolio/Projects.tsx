@@ -86,37 +86,37 @@ export default function Projects({ theme, isHacker, projects }: Props) {
                   className="block h-full w-full text-left"
                   aria-label={`Abrir detalles de ${title}`}
                 >
-                  <Card className="overflow-hidden transition-all duration-300 bg-transparent backdrop-blur-sm flex flex-col h-full border-none rounded-lg max-w-lg mx-auto gap-0">
-                    {/* Imagen */}
-                    <div className="relative overflow-hidden">
+                  <div className="flex flex-col h-full max-w-lg mx-auto">
+                    {/* Imagen rectangular superior */}
+                    <div className="relative overflow-hidden rounded-t-xl border-x border-t border-gray-700 bg-gray-900/30">
                       <Image
                         src={p.image || "/placeholder.svg"}
                         alt={title}
                         width={600}
-                        height={400}
-                        className="w-full h-72 object-cover rounded-t-lg"
+                        height={300}
+                        className="w-full h-52 object-cover transition-transform duration-300 group-hover:scale-105"
                       />
                       <div className="absolute inset-0 bg-gradient-to-t from-black/60 to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-300" />
                     </div>
 
-                    {/* Contenido */}
-                    <CardContent className="p-6 flex flex-col flex-1 bg-gray-900/50 border border-gray-700 border-t-0 rounded-b-lg">
-                      <h3 className="text-xl font-bold text-white mb-2">
+                    {/* Contenido en recuadro separado */}
+                    <div className="p-6 flex flex-col flex-1 bg-gray-900/70 border border-gray-700 rounded-b-xl mt-1 backdrop-blur-sm transition-colors duration-300 group-hover:border-cyan-400/40">
+                      <h3 className="text-xl font-bold text-white mb-3">
                         {isHacker ? `${title}.exe` : title}
                       </h3>
-                      <p className="text-gray-400 mb-4 flex-1">{description}</p>
+                      <p className="text-gray-400 mb-4 flex-1 leading-relaxed">{description}</p>
                       <div className="flex flex-wrap gap-2 mt-auto">
                         {p.tech.map((t) => (
                           <span
                             key={t}
-                            className={`px-3 py-1 rounded-md text-sm font-medium text-gray-300/90`}
+                            className="px-3 py-1 rounded-md text-sm font-medium bg-gray-800/50 text-gray-300/90 border border-gray-700"
                           >
                             {t}
                           </span>
                         ))}
                       </div>
-                    </CardContent>
-                  </Card>
+                    </div>
+                  </div>
                 </button>
               </motion.div>
             );

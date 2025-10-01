@@ -95,11 +95,6 @@ export default function Comments({
         {/* ---- Counter pill ---- */}
         <div className="w-full flex items-center justify-center mb-8">
           <div className="relative group">
-            {/* Glow */}
-            <div
-              className="absolute -inset-[2px] rounded-2xl bg-gradient-to-r from-indigo-500/40 via-violet-500/40 to-fuchsia-500/40 blur-sm opacity-60 group-hover:opacity-90 transition-opacity duration-300"
-              aria-hidden="true"
-            />
             {/* Content */}
             <div className="relative rounded-2xl border border-white/10 bg-white/5 backdrop-blur-sm px-4 sm:px-5 py-2.5 sm:py-3 flex items-center gap-3 shadow-[0_8px_30px_rgba(0,0,0,0.25)]">
               {/* Icono inline para evitar deps */}
