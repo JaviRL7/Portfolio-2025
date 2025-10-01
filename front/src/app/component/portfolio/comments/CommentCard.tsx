@@ -20,9 +20,9 @@ export default function CommentCard({ c, theme }: { c: CommentItem; theme: Theme
       className={`group h-full relative overflow-hidden rounded-2xl
       border ${theme.border} bg-white/[0.06] backdrop-blur-md
       ring-1 ring-white/10 shadow-[0_8px_30px_rgba(0,0,0,0.12)]
-      transition-all duration-300 hover:-translate-y-0.5 hover:shadow-[0_16px_50px_rgba(0,0,0,0.25)]`}
+      transition-all duration-300 hover:border-cyan-400/30 hover:ring-cyan-400/20`}
     >
-      <div className="pointer-events-none absolute inset-0 opacity-0 group-hover:opacity-100 transition-opacity duration-300 bg-gradient-to-br from-white/10 to-transparent" />
+      <div className="pointer-events-none absolute inset-0 opacity-0 group-hover:opacity-100 transition-opacity duration-500 bg-gradient-to-br from-cyan-400/5 to-transparent" />
       <CardContent className="relative p-5">
         <div className="flex items-start justify-between gap-3 mb-3">
           <div className="min-w-0">

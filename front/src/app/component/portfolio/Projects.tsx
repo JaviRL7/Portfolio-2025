@@ -88,19 +88,24 @@ export default function Projects({ theme, isHacker, projects }: Props) {
                 >
                   <div className="flex flex-col h-full max-w-lg mx-auto">
                     {/* Imagen rectangular superior */}
-                    <div className="relative overflow-hidden rounded-t-xl border-x border-t border-gray-700 bg-gray-900/30">
+                    <div className="relative overflow-hidden rounded-xl border border-gray-700 bg-gray-900/30">
                       <Image
                         src={p.image || "/placeholder.svg"}
                         alt={title}
                         width={600}
-                        height={300}
-                        className="w-full h-52 object-cover transition-transform duration-300 group-hover:scale-105"
+                        height={350}
+                        className="w-full h-64 object-cover transition-all duration-500 ease-out"
                       />
-                      <div className="absolute inset-0 bg-gradient-to-t from-black/60 to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-300" />
+                      <div className="absolute inset-0 bg-black/0 group-hover:bg-black/20 transition-all duration-500 ease-out" />
+                      <div className="absolute inset-0 flex items-center justify-center opacity-0 group-hover:opacity-100 transition-opacity duration-500">
+                        <span className="text-white/90 font-medium px-4 py-2 rounded-lg bg-black/40 backdrop-blur-sm border border-white/20">
+                          Ver más
+                        </span>
+                      </div>
                     </div>
 
                     {/* Contenido en recuadro separado */}
-                    <div className="p-6 flex flex-col flex-1 bg-gray-900/70 border border-gray-700 rounded-b-xl mt-1 backdrop-blur-sm transition-colors duration-300 group-hover:border-cyan-400/40">
+                    <div className="p-6 flex flex-col flex-1 bg-gray-900/70 border border-gray-700 rounded-xl mt-3 backdrop-blur-sm transition-colors duration-300 group-hover:border-cyan-400/40">
                       <h3 className="text-xl font-bold text-white mb-3">
                         {isHacker ? `${title}.exe` : title}
                       </h3>

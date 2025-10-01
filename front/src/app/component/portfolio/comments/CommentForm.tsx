@@ -100,18 +100,21 @@ export default function CommentsForm({
             <label className="absolute -top-5 left-0 text-xs text-gray-400 uppercase tracking-wider">
               {t.msg}
             </label>
-            <div className="flex items-center justify-between mt-2 text-xs opacity-70">
-              <span>{remaining} {t.chars}</span>
-              <span className="flex items-center gap-1"><MessageSquare size={14} /> {t.instant}</span>
+            <div className="flex items-center justify-between mt-4 text-sm text-gray-400">
+              <span className="font-medium">{remaining} <span className="opacity-80">{t.chars}</span></span>
+              <span className="flex items-center gap-2 opacity-90">
+                <MessageSquare size={16} className="text-cyan-400/80" />
+                <span>{t.instant}</span>
+              </span>
             </div>
           </div>
         </div>
 
-        <div className="mt-10 flex justify-end">
+        <div className="mt-12 flex justify-end">
           <Button
             type="submit"
             disabled={loading || !name || !message}
-            className={`group rounded-2xl px-6 py-3 font-semibold shadow-lg ${loading ? "opacity-60" : ""} bg-gradient-to-r ${theme.secondary} hover:shadow-cyan-500/50 transition-all`}
+            className={`group rounded-lg px-8 py-3 font-medium border border-cyan-500/50 bg-cyan-500/10 hover:bg-cyan-500/20 text-cyan-400 hover:text-cyan-300 backdrop-blur-sm transition-all duration-300 ${loading ? "opacity-60 cursor-not-allowed" : "hover:border-cyan-400/70"}`}
           >
             <span className="mr-2">{t.send}</span>
             <Send className="h-4 w-4 group-hover:translate-x-0.5 transition-transform" />

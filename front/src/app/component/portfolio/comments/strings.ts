@@ -2,7 +2,7 @@
 export const STRINGS = {
   es: {
     title: { normal: "COMENTARIOS", hacker: "GUESTBOOK.log" },
-    subtitle: { normal: "Dejame tu mensaje ✍️", hacker: "// Firma el repo humano" },
+    subtitle: { normal: "Dejame tu mensaje", hacker: "// Firma el repo humano" },
     name: "Nombre",
     role: "Rol (opcional)",
     rolePh: "Frontend, Tech Lead, Cliente, etc.",
@@ -19,7 +19,7 @@ export const STRINGS = {
   },
   en: {
     title: { normal: "COMMENTS", hacker: "GUESTBOOK.log" },
-    subtitle: { normal: "Leave me your message ✍️", hacker: "// Sign the human repo" },
+    subtitle: { normal: "Leave me your message", hacker: "// Sign the human repo" },
     name: "Name",
     role: "Role (optional)",
     rolePh: "Frontend, Tech Lead, Client, etc.",
