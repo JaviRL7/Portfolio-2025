@@ -95,8 +95,8 @@ export default function Hero({
           <Button
             onClick={() => {
     const link = document.createElement("a");
-          link.href = "/CV Javier Rodriguez OP 2025.pdf";
-          link.download = "CV Javier Rodriguez OP 2025.pdf";
+          link.href = "/JavierRL CV 2025.pdf";
+          link.download = "JavierRL CV 2025.pdf";
           link.click();
         }}
             variant="outline"
